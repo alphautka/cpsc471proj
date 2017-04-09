@@ -49,6 +49,7 @@ public class MainMenuActivity extends AppCompatActivity {
             public void onClick(View view) {
                 conn = connectionclass(un, pass, db, ip);
                 TextView t1 = (TextView)findViewById(R.id.result);
+                TextView test = (TextView)findViewById(R.id.test);
                 if(conn == null){
                     t1.setText("No");
                 }else{
@@ -57,8 +58,11 @@ public class MainMenuActivity extends AppCompatActivity {
                     dbh = new DatabaseHandler(conn, un, pass, db, ip);
 
                     try {
+
                         liquorList = dbh.getAllLiquors();
+                        int liquorCount = dbh.getLiquorCount();
                         t1.setText("Retrieved All Liquor");
+                        test.setText(String.valueOf(liquorCount));
                     } catch(Exception e){e.printStackTrace();}
                // liquor();
             }

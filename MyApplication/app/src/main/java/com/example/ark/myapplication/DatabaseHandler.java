@@ -740,12 +740,13 @@ public class DatabaseHandler {
     //For specific products
     public int getLiquorCount(){
         int count = 0;
-        String query = "SELECT COUNT(*) AS rowcount FROM " + db + "." + TABLE_LIQUOR + ";";
+
+        String query = "SELECT COUNT(*) AS total FROM " + db + ".dbo." + TABLE_LIQUOR + ";";
         try {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
             result.next();
-            count = result.getInt("rowcount");
+            count = result.getInt("total");
             result.close();
 
 
