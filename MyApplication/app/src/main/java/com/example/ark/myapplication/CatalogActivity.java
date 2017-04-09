@@ -36,21 +36,21 @@ public class CatalogActivity extends RelativeLayout{
         inflater.inflate(R.layout.activity_catalog, this);
     }
 
-    public void setPrice(float p){
+    public void setPrice(Products product){
         TextView mPriceLabel = (TextView) this.findViewById(R.id.priceLabel);
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);
         df.setMinimumFractionDigits(2);
-        mPriceLabel.setText(df.format(p));
+        mPriceLabel.setText(df.format(product.getPrice()));
     }
 
-    public void setBrand(String brand){
+    public void setBrand(Products product){
         TextView mBrandLabel = (TextView) this.findViewById(R.id.brandLabel);
-        mBrandLabel.setText(brand);
+        mBrandLabel.setText(product.getBrand());
     }
 
-    public void setName(String name) {
+    public void setName(Products product) {
         TextView mTextLabel = (TextView) this.findViewById(R.id.nameLabel);
-        mTextLabel.setText(name);
+        mTextLabel.setText(product.getName());
     }
 }

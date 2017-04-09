@@ -48,10 +48,10 @@ public class MainActivity extends AppCompatActivity {
 
         //NOTE: Fill these attributes before you execute this program
         //NOTE: For ip address, if you are provided with a port number, the format will be "ipaddress:portnumber"
-        ip = "";    //enter ip address here
-        db = "";    //emter database name here
-        un = "";    //enter username here
-        pass = "";  //enter password here
+        ip = "136.159.7.84:50001";    //enter ip address here
+        db = "CPSC471_Winter2017";    //emter database name here
+        un = "CPSC471_Winter2017";    //enter username here
+        pass = "6VXVM_0~rq1F-$W";  //enter password here
     }
 
     private void guest() {
