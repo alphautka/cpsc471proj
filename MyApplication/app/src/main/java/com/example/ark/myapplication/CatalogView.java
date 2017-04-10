@@ -29,6 +29,7 @@ public class CatalogView extends AppCompatActivity {
         typeLabel.setText(labelText);
 
         CatalogActivity temp = new CatalogActivity(this);
+        
 
 
     }

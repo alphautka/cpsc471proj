@@ -23,10 +23,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+
+
 public class MainActivity extends AppCompatActivity {
 
-    Connection conn;
-    String un, pass, db, ip;
+    public static final DatabaseHandler db = new DatabaseHandler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +52,10 @@ public class MainActivity extends AppCompatActivity {
 
         //NOTE: Fill these attributes before you execute this program
         //NOTE: For ip address, if you are provided with a port number, the format will be "ipaddress:portnumber"
-        ip = "136.159.7.84:50001";    //enter ip address here
+        /*ip = "136.159.7.84:50001";    //enter ip address here
         db = "CPSC471_Winter2017";    //emter database name here
         un = "CPSC471_Winter2017";    //enter username here
-        pass = "6VXVM_0~rq1F-$W";  //enter password here
+        pass = "6VXVM_0~rq1F-$W";  //enter password here*/
     }
 
     private void guest() {
