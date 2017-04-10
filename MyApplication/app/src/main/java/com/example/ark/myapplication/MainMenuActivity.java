@@ -40,7 +40,6 @@ public class MainMenuActivity extends AppCompatActivity {
         nliquorList = new ArrayList<>();
         miscList = new ArrayList<>();
 
-
         final Button liquorButton = (Button)findViewById(R.id.liquorButton);
         Button nonLiquorButton = (Button)findViewById(R.id.nonLiquorButton);
         Button miscButton = (Button)findViewById(R.id.miscButton);

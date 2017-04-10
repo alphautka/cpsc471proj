@@ -19,7 +19,8 @@
         </activity>
         <activity android:name=".MainMenuActivity" />
         <activity android:name=".CatalogActivity" />
-        <activity android:name=".CatalogListActivity"></activity>
+        <activity android:name=".CatalogListActivity" />
+        <activity android:name=".EmployeeView"></activity>
     </application>
 
 </manifest>
