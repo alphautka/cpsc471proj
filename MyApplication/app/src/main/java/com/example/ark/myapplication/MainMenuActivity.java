@@ -115,14 +115,14 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void miscellaneous(){
-        startActivity(new Intent(getApplicationContext(), CatalogListActivity.class));
+        //startActivity(new Intent(getApplicationContext(), CatalogListActivity.class));
     }
 
     private void liquor(){
-        startActivity(new Intent(getApplicationContext(), CatalogListActivity.class));
+        //startActivity(new Intent(getApplicationContext(), CatalogListActivity.class));
     }
     private void nonLiquor(){
-        startActivity(new Intent(getApplicationContext(), CatalogListActivity.class));
+        //startActivity(new Intent(getApplicationContext(), CatalogListActivity.class));
     }
 
 
