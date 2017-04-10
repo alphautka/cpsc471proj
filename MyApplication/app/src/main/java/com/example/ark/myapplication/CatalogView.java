@@ -26,25 +26,25 @@ public class CatalogView extends AppCompatActivity {
 
         if (type.equals("Liquor")){
             labelText = "Liquor";
-            try {
-                list = MainActivity.db.getAllLiquors();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                list = MainActivity.db.getAllLiquors();
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
         }else if(type.equals("Non-Liquor")){
             labelText = "Non-Liquor";
-            try {
-                list = MainActivity.db.getAllNonLiquors();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                list = MainActivity.db.getAllNonLiquors();
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
         }else if(type.equals("Misc")){
             labelText = "Misc.";
-            try {
-                list = MainActivity.db.getAllMiscs();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                list = MainActivity.db.getAllMiscs();
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
         }else{
             System.out.println("wrong args passed to CatalogView");        }
 
@@ -58,13 +58,17 @@ public class CatalogView extends AppCompatActivity {
             i1.setConcentration("5%");
             i1.setLtype("Beer");
             i1.setVolume("750 mL");
+            i1.setName("Beer");
+            i1.setBrand("Marshmallow");
+            i1.setPrice(9.99f);
             testlist.add(i1);
         }
 
         //fill the catalog with items returned from db query
         LinearLayout catalogList = (LinearLayout)findViewById(R.id.catalogLayout);
 
-        for(Products p : list){
+
+        for(Products p : testlist){
             CatalogActivity temp = new CatalogActivity(this);
             temp.setName(p);
             temp.setBrand(p);

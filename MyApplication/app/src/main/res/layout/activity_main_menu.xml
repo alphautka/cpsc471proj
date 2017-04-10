@@ -18,13 +18,12 @@
 
         <Button
             android:id="@+id/liquorButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
+            android:layout_weight="1"
             android:width="125dp"
             android:text="Liquor" />
-
-
     </LinearLayout>
 
     <LinearLayout
@@ -36,13 +35,12 @@
 
         <Button
             android:id="@+id/nonLiquorButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
+            android:layout_weight="1"
             android:width="125dp"
             android:text="Non-Liquor"></Button>
-
-
     </LinearLayout>
 
     <LinearLayout

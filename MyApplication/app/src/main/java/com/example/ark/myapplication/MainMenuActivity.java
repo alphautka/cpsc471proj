@@ -46,26 +46,9 @@ public class MainMenuActivity extends AppCompatActivity {
 
         liquorButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                conn = connectionclass(un, pass, db, ip);
-                TextView t1 = (TextView)findViewById(R.id.result);
-                TextView test = (TextView)findViewById(R.id.test);
-                if(conn == null){
-                    t1.setText("No");
-                }else{
-                    t1.setText("Yes");
-
-                    dbh = new DatabaseHandler(conn, un, pass, db, ip);
-
-                    try {
-
-                        liquorList = dbh.getAllLiquors();
-                        int liquorCount = dbh.getLiquorCount();
-                        t1.setText("Retrieved All Liquor");
-                        test.setText(String.valueOf(liquorCount));
-                    } catch(Exception e){e.printStackTrace();}
-               // liquor();
+                liquor();
             }
-        } });
+         });
 
         nonLiquorButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -120,6 +103,9 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private void liquor(){
         //startActivity(new Intent(getApplicationContext(), CatalogListActivity.class));
+        Intent i = new Intent(getApplicationContext(), CatalogView.class);
+        i.putExtra("prod_type", "Liquor");
+        startActivity(i);
     }
     private void nonLiquor(){
         //startActivity(new Intent(getApplicationContext(), CatalogListActivity.class));
