@@ -21,7 +21,8 @@
         <activity android:name=".CatalogActivity" />
         <activity android:name=".CatalogListActivity" />
         <activity android:name=".EmployeeView" />
-        <activity android:name=".CatalogView"></activity>
+        <activity android:name=".CatalogView" />
+        <activity android:name=".DetailedItemView"></activity>
     </application>
 
 </manifest>
