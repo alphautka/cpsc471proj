@@ -1,7 +1,9 @@
 package com.example.ark.myapplication;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -73,10 +75,20 @@ public class CatalogView extends AppCompatActivity {
             temp.setName(p);
             temp.setBrand(p);
             temp.setPrice(p);
+            temp.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    detailView();
+                }
+            } );
 
             catalogList.addView(temp);
         }
 
 
+    }
+
+    void detailView(){
+        Intent i = new Intent(getApplicationContext(), DetailedItemView.class);
+        startActivity(i);
     }
 }
