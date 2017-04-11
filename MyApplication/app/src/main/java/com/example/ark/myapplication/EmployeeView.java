@@ -21,6 +21,8 @@ public class EmployeeView extends AppCompatActivity {
         Button customersButton = (Button)findViewById(R.id.customersButton);
         Button orderButton = (Button)findViewById(R.id.orderButton);
 
+        Button logoutButton = (Button)findViewById(R.id.logoutButton);
+
         browseButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 browse();
@@ -39,6 +41,12 @@ public class EmployeeView extends AppCompatActivity {
             }
         } );
 
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                logout();
+            }
+        });
+
     }
 
     void browse(){
@@ -51,4 +59,10 @@ public class EmployeeView extends AppCompatActivity {
     }
     void order(){}
 
+
+    void logout(){
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        i.putExtra("PriviledgedUser", false);
+        startActivity(i);
+    }
 }

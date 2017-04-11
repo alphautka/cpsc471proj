@@ -26,10 +26,19 @@ public class MainMenuActivity extends AppCompatActivity {
     List<Misc> miscList;
     Liquor liquor = new Liquor(1, "14%", "250mL", "Wine");
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+        Button logoutButton = (Button)findViewById(R.id.logoutButton);
+
+        boolean isPriviledged = getIntent().getBooleanExtra("PriviledgedUser", false);
+
+        if (isPriviledged) {
+            logoutButton.setVisibility(View.VISIBLE);
+            logoutButton.setEnabled(true);
+        }
 
         ip = "136.159.7.84:50001";    //enter ip address here
         db = "CPSC471_Winter2017";    //emter database name here
@@ -43,6 +52,12 @@ public class MainMenuActivity extends AppCompatActivity {
         final Button liquorButton = (Button)findViewById(R.id.liquorButton);
         Button nonLiquorButton = (Button)findViewById(R.id.nonLiquorButton);
         Button miscButton = (Button)findViewById(R.id.miscButton);
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                logout();
+            }
+        });
 
         liquorButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -95,6 +110,13 @@ public class MainMenuActivity extends AppCompatActivity {
                 //miscellaneous();
             }
         } });
+    }
+
+
+    private void logout(){
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        i.putExtra("PriviledgedUser", false);
+        startActivity(i);
     }
 
     private void miscellaneous(){

@@ -76,7 +76,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void guest() {
-        startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
+        Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
+        i.putExtra("PriviledgedUser", false);
+        startActivity(i);
     }
 
     private void login() {
