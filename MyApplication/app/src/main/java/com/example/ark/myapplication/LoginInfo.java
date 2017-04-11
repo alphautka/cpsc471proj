@@ -16,11 +16,11 @@ public class LoginInfo {
         this.pw = pw;
     }
 
-    public String getUn(){return this.un;}
+    public String getUn(){return this.un.replace(" ", "");}
 
     public void setUn(String un){this.un = un;}
 
-    public String getPw() {return this.pw;}
+    public String getPw() {return this.pw.replace(" ", "");}
 
     public void setPw(String pw) {this.pw = pw;}
 

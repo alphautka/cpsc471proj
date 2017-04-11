@@ -48,7 +48,7 @@ public class DatabaseHandler {
     private static final String TABLE_PROVIDES = "PROVIDES";
     private static final String TABLE_SEARCHES = "SEARCHES";
     private static final String TABLE_EMPLOYEE_SELECTION = "EMPLOYEE_SELECTION";
-    private static final String TABLE_CREDENTIALS = "CREDENTIALS";
+    private static final String TABLE_CREDENTIALS = "LOGIN_INFO";
 
 
 
@@ -109,6 +109,15 @@ public class DatabaseHandler {
     Insert
      */
 
+     public void addLoginInfo(LoginInfo loginInfo){
+         try {
+             String query = "INSERT INTO " + db + ".dbo." + TABLE_CREDENTIALS + " VALUES ('" + loginInfo.getUn() + "', '" + loginInfo.getPw() + "');";
+             Statement stmt = conn.createStatement();
+             stmt.execute(query);
+         } catch (SQLException e) {
+             e.printStackTrace();
+         }
+     }
 
     public void addProduct (Products product){
         try {
