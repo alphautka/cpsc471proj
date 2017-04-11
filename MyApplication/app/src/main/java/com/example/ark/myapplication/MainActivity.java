@@ -22,12 +22,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final DatabaseHandler db = new DatabaseHandler();
+    public static final DatabaseHandler dbh = new DatabaseHandler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,20 @@ public class MainActivity extends AppCompatActivity {
         EditText user_in = (EditText) findViewById(R.id.username);
         EditText pass_in = (EditText) findViewById(R.id.password);
         //query db for actual username/pw here
+
+        try {
+            List<LoginInfo> infoList = dbh.getAllCredentials();
+            List<String> uns = new ArrayList<>();
+            List<String> pws = new ArrayList<>();
+            for (int i = 0; i < infoList.size(); i++){
+                uns.add(infoList.get(i).getUn());
+                pws.add(infoList.get(i).getPw());
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         String inputuser = user_in.getText().toString();
         String inputpass = pass_in.getText().toString();
