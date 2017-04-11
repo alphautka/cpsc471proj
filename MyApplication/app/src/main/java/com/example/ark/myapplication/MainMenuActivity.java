@@ -68,6 +68,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         nonLiquorButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                /*
                 conn = connectionclass(un, pass, db, ip);
                 TextView t1 = (TextView)findViewById(R.id.result);
                 if(conn == null){
@@ -84,12 +85,16 @@ public class MainMenuActivity extends AppCompatActivity {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
+
                 //nonLiquor();
-            }
+            } */
+
+                nonLiquor();
         } });
 
         miscButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                /*
                 conn = connectionclass(un, pass, db, ip);
                 TextView t1 = (TextView)findViewById(R.id.result);
                 if(conn == null){
@@ -109,7 +114,8 @@ public class MainMenuActivity extends AppCompatActivity {
                     }
 
                 //miscellaneous();
-            }
+            }*/
+                miscellaneous();
         } });
     }
 
@@ -122,6 +128,10 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private void miscellaneous(){
         //startActivity(new Intent(getApplicationContext(), CatalogListActivity.class));
+        Intent i = new Intent(getApplicationContext(), CatalogView.class);
+        i.putExtra("prod_type", "Misc");
+        i.putExtra("PriviledgedUser", isPriviledged);
+        startActivity(i);
     }
 
     private void liquor(){
@@ -133,6 +143,10 @@ public class MainMenuActivity extends AppCompatActivity {
     }
     private void nonLiquor(){
         //startActivity(new Intent(getApplicationContext(), CatalogListActivity.class));
+        Intent i = new Intent(getApplicationContext(), CatalogView.class);
+        i.putExtra("prod_type", "Non-Liquor");
+        i.putExtra("PriviledgedUser", isPriviledged);
+        startActivity(i);
     }
 
 
