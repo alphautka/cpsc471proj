@@ -27,12 +27,14 @@ import java.sql.Statement;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final DatabaseHandler db = new DatabaseHandler();
+    public static DatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        db = new DatabaseHandler();
 
         Button loginButton = (Button)findViewById(R.id.loginButton);
         Button guestButton = (Button)findViewById(R.id.guestButton);

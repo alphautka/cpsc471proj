@@ -40,9 +40,10 @@ public class MainMenuActivity extends AppCompatActivity {
         nliquorList = new ArrayList<>();
         miscList = new ArrayList<>();
 
-        final Button liquorButton = (Button)findViewById(R.id.liquorButton);
+        Button liquorButton = (Button)findViewById(R.id.liquorButton);
         Button nonLiquorButton = (Button)findViewById(R.id.nonLiquorButton);
         Button miscButton = (Button)findViewById(R.id.miscButton);
+        Button favButton = (Button)findViewById(R.id.favoritesButton);
 
         liquorButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -52,53 +53,26 @@ public class MainMenuActivity extends AppCompatActivity {
 
         nonLiquorButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                conn = connectionclass(un, pass, db, ip);
-                TextView t1 = (TextView)findViewById(R.id.result);
-                if(conn == null){
-                    t1.setText("No");
-                }else{
-                    t1.setText("Yes");
-
-
-                    dbh = new DatabaseHandler(conn, un, pass, db, ip);
-
-                    try {
-                        nliquorList = dbh.getAllNonLiquors();
-                        t1.setText("Retrieved All Non-Liquor");
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                //nonLiquor();
-            }
+                nonLiquor();
         } });
 
         miscButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                conn = connectionclass(un, pass, db, ip);
-                TextView t1 = (TextView)findViewById(R.id.result);
-                if(conn == null){
-                    t1.setText("No");
-                }else{
-                    t1.setText("Yes");
-                    dbh = new DatabaseHandler(conn, un, pass, db, ip);
-
-                    try{
-
-
-                        miscList = dbh. getAllMiscs();
-                        t1.setText("Retrieved All Misc");
-
-                    }catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-
-                //miscellaneous();
-            }
+                miscellaneous();
         } });
+
+        favButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                favs();
+            }
+        });
     }
 
     private void miscellaneous(){
         //startActivity(new Intent(getApplicationContext(), CatalogListActivity.class));
+        Intent i = new Intent(getApplicationContext(), CatalogView.class);
+        i.putExtra("prod_type", "Misc");
+        startActivity(i);
     }
 
     private void liquor(){
@@ -109,8 +83,16 @@ public class MainMenuActivity extends AppCompatActivity {
     }
     private void nonLiquor(){
         //startActivity(new Intent(getApplicationContext(), CatalogListActivity.class));
+        Intent i = new Intent(getApplicationContext(), CatalogView.class);
+        i.putExtra("prod_type", "Non-Liquor");
+        startActivity(i);
     }
 
+    private void favs(){
+        Intent i = new Intent(getApplicationContext(), CatalogView.class);
+        i.putExtra("prod_type", "Fav");
+        startActivity(i);
+    }
 
 
 
