@@ -22,7 +22,9 @@
         <activity android:name=".CatalogListActivity" />
         <activity android:name=".EmployeeView" />
         <activity android:name=".CatalogView" />
-        <activity android:name=".DetailedItemView"></activity>
+        <activity android:name=".DetailedItemView" />
+        <activity android:name=".OrderForm" />
+        <activity android:name=".OrderItem"></activity>
     </application>
 
 </manifest>
