@@ -25,6 +25,7 @@ public class MainMenuActivity extends AppCompatActivity {
     List<Non_Liquor> nliquorList;
     List<Misc> miscList;
     Liquor liquor = new Liquor(1, "14%", "250mL", "Wine");
+    boolean isPriviledged;
 
 
     @Override
@@ -33,7 +34,7 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         Button logoutButton = (Button)findViewById(R.id.logoutButton);
 
-        boolean isPriviledged = getIntent().getBooleanExtra("PriviledgedUser", false);
+        isPriviledged = getIntent().getBooleanExtra("PriviledgedUser", false);
 
         if (isPriviledged) {
             logoutButton.setVisibility(View.VISIBLE);
@@ -127,6 +128,7 @@ public class MainMenuActivity extends AppCompatActivity {
         //startActivity(new Intent(getApplicationContext(), CatalogListActivity.class));
         Intent i = new Intent(getApplicationContext(), CatalogView.class);
         i.putExtra("prod_type", "Liquor");
+        i.putExtra("PriviledgedUser", isPriviledged);
         startActivity(i);
     }
     private void nonLiquor(){
