@@ -20,14 +20,18 @@ import java.util.List;
 public class DatabaseHandler {
 
     Connection conn;
-    String db = "CPSC471_Winter2017";
+    String ip, db, un, pw;
 
     public DatabaseHandler(){
         conn = connectionclass("CPSC471_Winter2017", "6VXVM_0~rq1F-$W", "CPSC471_Winter2017", "136.159.7.84:50001");
     }
 
-    public DatabaseHandler(Connection connection){
+    public DatabaseHandler(Connection connection, String ip, String dbName, String un, String pw){
         this.conn = connection;
+        this.ip = ip;
+        this.db = dbName;
+        this.un = un;
+        this.pw = pw;
 
     }
 
