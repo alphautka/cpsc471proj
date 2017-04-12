@@ -323,7 +323,7 @@ public class DatabaseHandler {
         return product;
     }
 
-    public Products getNonLiquor(int cspc){
+    public Non_Liquor getNonLiquor(int cspc){
         String query = "SELECT * FROM " + db + ".dbo." + TABLE_NON_LIQUOR + " WHERE CSPC = " + cspc + ";";
         Non_Liquor product = new Non_Liquor();
         try {
@@ -706,8 +706,8 @@ public class DatabaseHandler {
                 customer.setLname(result.getString("LNAME"));
                 customer.setPhoneNumber(result.getString("PHONE_NUMBER"));
                 customer.setDiscount(result.getString("DISCOUNT"));
-                customerList.add(customer);
 
+                customerList.add(customer);
             }
 
 
