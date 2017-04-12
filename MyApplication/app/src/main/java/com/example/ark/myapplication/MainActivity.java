@@ -28,7 +28,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final DatabaseHandler dbh = new DatabaseHandler();
+    public static DatabaseHandler dbh;
 
     Connection conn;
     String un, pass, db, ip;
@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         ip = "136.159.7.84:50001";    //enter ip address here
         db = "CPSC471_Winter2017";    //emter database name here

@@ -72,7 +72,17 @@ public class CatalogView extends AppCompatActivity {
 //            } catch (SQLException e) {
 //                e.printStackTrace();
 //            }
-        }else{
+        }else if (type.equals("Fav")) {
+            labelText = "Employee Picks";
+            try {
+                list = MainActivity.dbh.getAllEmployeeSelections();
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+        }
+
+
+        else{
             System.out.println("wrong args passed to CatalogView");        }
 
         TextView typeLabel = (TextView)findViewById(R.id.TypeLabel);

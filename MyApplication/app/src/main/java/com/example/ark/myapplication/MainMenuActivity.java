@@ -68,53 +68,12 @@ public class MainMenuActivity extends AppCompatActivity {
 
         nonLiquorButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                /*
-                conn = connectionclass(un, pass, db, ip);
-                TextView t1 = (TextView)findViewById(R.id.result);
-                if(conn == null){
-                    t1.setText("No");
-                }else{
-                    t1.setText("Yes");
-
-
-                    dbh = new DatabaseHandler(conn, un, pass, db, ip);
-
-                    try {
-                        nliquorList = dbh.getAllNonLiquors();
-                        t1.setText("Retrieved All Non-Liquor");
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-
-                //nonLiquor();
-            } */
 
                 nonLiquor();
         } });
 
         miscButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                /*
-                conn = connectionclass(un, pass, db, ip);
-                TextView t1 = (TextView)findViewById(R.id.result);
-                if(conn == null){
-                    t1.setText("No");
-                }else{
-                    t1.setText("Yes");
-                    dbh = new DatabaseHandler(conn, un, pass, db, ip);
-
-                    try{
-
-
-                        miscList = dbh. getAllMiscs();
-                        t1.setText("Retrieved All Misc");
-
-                    }catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-
-                //miscellaneous();
-            }*/
                 miscellaneous();
         } });
     }
