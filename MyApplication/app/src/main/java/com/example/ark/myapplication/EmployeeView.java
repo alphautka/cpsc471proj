@@ -55,7 +55,8 @@ public class EmployeeView extends AppCompatActivity {
         startActivity(i);
     }
     void customers(){
-
+        Intent i = new Intent(getApplicationContext(), CustomerList.class);
+        startActivity(i);
     }
     void order(){}
 
