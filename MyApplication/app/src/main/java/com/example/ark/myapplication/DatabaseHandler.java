@@ -280,8 +280,8 @@ public class DatabaseHandler {
 
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
-
             result.next();
+
             product.setCspc(result.getInt("CSPC"));
             product.setPrice(result.getFloat("PRICE"));
             product.setBrand(result.getString("BRAND"));
@@ -299,23 +299,19 @@ public class DatabaseHandler {
 
 
     //Get specific product from specific tables
-    public Products getLiquor(int cspc){
+    public Liquor getLiquor(int cspc){
         String query = "SELECT * FROM " + db + ".dbo." + TABLE_LIQUOR + " WHERE CSPC = " + cspc + ";";
-        Products product = new Products();
+        Liquor product = new Liquor();
         try {
 
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
-
+			result.next();
             product.setCspc(result.getInt("CSPC"));
-            product.setPrice(result.getFloat("PRICE"));
-            product.setBrand(result.getString("BRAND"));
-            product.setName(result.getString("NAME"));
-            product.setQuantity(result.getInt("QUANTITY"));
-            product.setDiscount(result.getString("DOUBLE"));
-            product.setOfferedBy(result.getInt("OFFERED_BY"));
-
+            product.setConcentration(result.getString("CONCENTRATION"));
+            product.setVolume(result.getString("VOLUME"));
+            product.setLtype(result.getString("LTYPE"));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -331,7 +327,7 @@ public class DatabaseHandler {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
-
+			result.next();
             product.setCspc(result.getInt("CSPC"));
             product.setPrice(result.getFloat("PRICE"));
             product.setBrand(result.getString("BRAND"));
@@ -340,7 +336,6 @@ public class DatabaseHandler {
             product.setDiscount(result.getString("DISCOUNT"));
             product.setOfferedBy(result.getInt("OFFERED_BY"));
 
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -348,22 +343,17 @@ public class DatabaseHandler {
     }
 
 
-    public Products getMisc(int cspc){
+    public Misc getMisc(int cspc){
         String query = "SELECT * FROM " + db + ".dbo." + TABLE_MISC + " WHERE CSPC = " + cspc + ";";
-        Products product = new Products();
+        Misc product = new Misc();
         try {
 
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
-
+			result.next();
             product.setCspc(result.getInt("CSPC"));
-            product.setPrice(result.getFloat("PRICE"));
-            product.setBrand(result.getString("BRAND"));
-            product.setName(result.getString("NAME"));
-            product.setQuantity(result.getInt("QUANTITY"));
-            product.setDiscount(result.getString("DOUBLE"));
-            product.setOfferedBy(result.getInt("OFFERED_BY"));
+            product.setMtype(result.getString("MTYPE"));
 
 
         } catch (SQLException e) {
@@ -380,6 +370,7 @@ public class DatabaseHandler {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
+			result.next();
             store.setSid(result.getInt("SID"));
             store.setLocation(result.getString("LOCATION"));
             store.setMgrssn(result.getInt("MGRSSN"));
@@ -401,6 +392,7 @@ public class DatabaseHandler {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
+			result.next();
             employee.setSsn(result.getInt("SSN"));
             employee.setFname(result.getString("FNAME"));
             employee.setMname(result.getString("MNAME"));
@@ -426,7 +418,7 @@ public class DatabaseHandler {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
-
+			result.next();
             customer.setCid(result.getInt("CID"));
             customer.setFname(result.getString("FNAME"));
             customer.setLname(result.getString("LNAME"));
@@ -448,7 +440,7 @@ public class DatabaseHandler {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
-
+			result.next();
             distributor.setDid(result.getInt("DID"));
             distributor.setName(result.getString("NAME"));
             distributor.setSupplies(result.getInt("SUPPLIES"));
@@ -469,6 +461,7 @@ public class DatabaseHandler {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
+			result.next();
             order.setOid(result.getInt("OID"));
             order.setApproved(result.getString("APPROVED"));
             order.setCreatedBy(result.getInt("CREATED_BY"));
@@ -646,7 +639,7 @@ public class DatabaseHandler {
                 store.setSid(result.getInt("SID"));
                 store.setLocation(result.getString("LOCATION"));
                 store.setMgrssn(result.getInt("MGRSSN"));
-
+				storeList.add(store);
             }
 
 
@@ -676,7 +669,7 @@ public class DatabaseHandler {
                 employee.setLname(result.getString("LNAME"));
                 employee.setMgrssn(result.getInt("MGRSSN"));
                 employee.setWorksFor(result.getInt("WORKS_FOR"));
-
+				employeeList.add(employee);
             }
 
 
@@ -706,8 +699,8 @@ public class DatabaseHandler {
                 customer.setLname(result.getString("LNAME"));
                 customer.setPhoneNumber(result.getString("PHONE_NUMBER"));
                 customer.setDiscount(result.getString("DISCOUNT"));
+				customerList.add(customer);
 
-                customerList.add(customer);
             }
 
 
@@ -734,7 +727,7 @@ public class DatabaseHandler {
                 distributor.setDid(result.getInt("DID"));
                 distributor.setName(result.getString("NAME"));
                 distributor.setSupplies(result.getInt("SUPPLIES"));
-
+				distributorList.add(distributor);
 
             }
 
@@ -764,7 +757,7 @@ public class DatabaseHandler {
                 order.setApproved(result.getString("APPROVED"));
                 order.setCreatedBy(result.getInt("CREATED_BY"));
                 order.setFulfilledBy(result.getInt("FULFILLED_BY"));
-
+				orderList.add(order);
             }
 
 
