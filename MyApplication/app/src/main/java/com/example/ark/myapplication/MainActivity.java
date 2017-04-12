@@ -34,7 +34,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        db = new DatabaseHandler();
+        String ip = "136.159.7.84:50001";    //enter ip address here
+        String dbName = "CPSC471_Winter2017";    //emter database name here
+        String un = "CPSC471_Winter2017";    //enter username here
+        String pass = "6VXVM_0~rq1F-$W";  //enter password here
+        Connection conn = connectionclass(ip, dbName, un, pass);
+
+        db = new DatabaseHandler(conn, ip, dbName, un, pass);
 
         Button loginButton = (Button)findViewById(R.id.loginButton);
         Button guestButton = (Button)findViewById(R.id.guestButton);
@@ -54,10 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
         //NOTE: Fill these attributes before you execute this program
         //NOTE: For ip address, if you are provided with a port number, the format will be "ipaddress:portnumber"
-        /*ip = "136.159.7.84:50001";    //enter ip address here
-        db = "CPSC471_Winter2017";    //emter database name here
-        un = "CPSC471_Winter2017";    //enter username here
-        pass = "6VXVM_0~rq1F-$W";  //enter password here*/
     }
 
     private void guest() {
@@ -80,9 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
         String inputuser = user_in.getText().toString();
         String inputpass = pass_in.getText().toString();
-
-
-
+        
         //if returned result is empty
             //show login error
         TextView errMsg = (TextView)findViewById(R.id.ErrorMsg);
@@ -101,6 +101,24 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    public Connection connectionclass (String user, String pass, String db, String server){
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        Connection connection = null;
+        String connectionURL = null;
+
+        try{
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            connectionURL = "jdbc:jtds:sqlserver://" + server + ";" + "databseName=" + db + ";user=" + user + ";password=" + pass + ";";
+            connection = DriverManager.getConnection(connectionURL);
+
+        }catch(Exception e){
+            Log.e("Error: ", e.getMessage());
+        }
+
+        return connection;
     }
 
     //Make sure to link the method to the button using the activity_main.xml file, click on the button, go to properties
