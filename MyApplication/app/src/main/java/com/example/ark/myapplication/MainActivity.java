@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
         String inputuser = user_in.getText().toString();
         String inputpass = pass_in.getText().toString();
-        
+
         //if returned result is empty
             //show login error
         TextView errMsg = (TextView)findViewById(R.id.ErrorMsg);

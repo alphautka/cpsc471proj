@@ -28,35 +28,36 @@ public class CatalogView extends AppCompatActivity {
 
         if (type.equals("Liquor")){
             labelText = "Liquor";
-//            try {
-//                list = MainActivity.db.getAllLiquors();
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                list = MainActivity.db.getAllLiquors();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }else if(type.equals("Non-Liquor")){
             labelText = "Non-Liquor";
-//            try {
-//                list = MainActivity.db.getAllNonLiquors();
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                list = MainActivity.db.getAllNonLiquors();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }else if(type.equals("Misc")){
             labelText = "Misc.";
-//            try {
-//                list = MainActivity.db.getAllMiscs();
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                list = MainActivity.db.getAllMiscs();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }else if(type.equals("Fav")) {
             labelText = "Employee Picks";
-//            try{
-//                list = MainActivity.db.getAllEmployeeSelections();
-//            }catch(SQLException e){
-//                e.printStackTrace();
-//            }
+            try{
+                list = MainActivity.db.getAllEmployeeSelections();
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
         }
         else{
-            System.out.println("wrong args passed to CatalogView");        }
+            System.out.println("wrong args passed to CatalogView");
+        }
 
         TextView typeLabel = (TextView)findViewById(R.id.TypeLabel);
         typeLabel.setText(labelText);
@@ -83,11 +84,7 @@ public class CatalogView extends AppCompatActivity {
             temp.setName(p);
             temp.setBrand(p);
             temp.setPrice(p);
-            temp.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    detailView();
-                }
-            } );
+            temp.setOnClickListener(new DetailedOnClickListener(p) );
 
             catalogList.addView(temp);
         }
@@ -95,8 +92,26 @@ public class CatalogView extends AppCompatActivity {
 
     }
 
-    void detailView(){
+    void detailView(Products p){
         Intent i = new Intent(getApplicationContext(), DetailedItemView.class);
+        i.putExtra("price", p.getPrice());
+        i.putExtra("discount", p.getDiscount());
+        i.putExtra("qty", p.getQuantity());
+
         startActivity(i);
     }
+
+    public class DetailedOnClickListener implements View.OnClickListener{
+
+        Products prod;
+        public DetailedOnClickListener(Products p){
+            prod = p;
+        }
+
+        @Override
+        public void onClick(View view) {
+            detailView(prod);
+        }
+    }
+
 }
