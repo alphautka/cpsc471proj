@@ -281,7 +281,7 @@ public class DatabaseHandler {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
-
+			result.next();
             product.setCspc(result.getInt("CSPC"));
             product.setPrice(result.getFloat("PRICE"));
             product.setBrand(result.getString("BRAND"));
@@ -307,7 +307,7 @@ public class DatabaseHandler {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
-
+			result.next();
             product.setCspc(result.getInt("CSPC"));
             product.setConcentration(result.getString("CONCENTRATION"));
             product.setVolume(result.getString("VOLUME"));
@@ -327,7 +327,7 @@ public class DatabaseHandler {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
-
+			result.next();
             product.setCspc(result.getInt("CSPC"));
             product.setVolume(result.getString("VOLUME"));
 
@@ -347,7 +347,7 @@ public class DatabaseHandler {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
-
+			result.next();
             product.setCspc(result.getInt("CSPC"));
             product.setMtype(result.getString("MTYPE"));
 
@@ -366,6 +366,7 @@ public class DatabaseHandler {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
+			result.next();
             store.setSid(result.getInt("SID"));
             store.setLocation(result.getString("LOCATION"));
             store.setMgrssn(result.getInt("MGRSSN"));
@@ -387,6 +388,7 @@ public class DatabaseHandler {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
+			result.next();
             employee.setSsn(result.getInt("SSN"));
             employee.setFname(result.getString("FNAME"));
             employee.setMname(result.getString("MNAME"));
@@ -412,7 +414,7 @@ public class DatabaseHandler {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
-
+			result.next();
             customer.setCid(result.getInt("CID"));
             customer.setFname(result.getString("FNAME"));
             customer.setLname(result.getString("LNAME"));
@@ -434,7 +436,7 @@ public class DatabaseHandler {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
-
+			result.next();
             distributor.setDid(result.getInt("DID"));
             distributor.setName(result.getString("NAME"));
             distributor.setSupplies(result.getInt("SUPPLIES"));
@@ -455,6 +457,7 @@ public class DatabaseHandler {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
+			result.next();
             order.setOid(result.getInt("OID"));
             order.setApproved(result.getString("APPROVED"));
             order.setCreatedBy(result.getInt("CREATED_BY"));
