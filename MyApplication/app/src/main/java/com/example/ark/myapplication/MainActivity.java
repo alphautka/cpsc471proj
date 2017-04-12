@@ -22,17 +22,24 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
 
+
     public static DatabaseHandler db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         String ip = "136.159.7.84:50001";    //enter ip address here
         String dbName = "CPSC471_Winter2017";    //emter database name here
@@ -41,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         Connection conn = connectionclass(ip, dbName, un, pass);
 
         db = new DatabaseHandler(conn, ip, dbName, un, pass);
+
 
         Button loginButton = (Button)findViewById(R.id.loginButton);
         Button guestButton = (Button)findViewById(R.id.guestButton);
@@ -60,10 +68,19 @@ public class MainActivity extends AppCompatActivity {
 
         //NOTE: Fill these attributes before you execute this program
         //NOTE: For ip address, if you are provided with a port number, the format will be "ipaddress:portnumber"
+
+        /*ip = "136.159.7.84:50001";    //enter ip address here
+        db = "CPSC471_Winter2017";    //emter database name here
+        un = "CPSC471_Winter2017";    //enter username here
+        pass = "6VXVM_0~rq1F-$W";  //enter password here*/
+
+  
     }
 
     private void guest() {
-        startActivity(new Intent(getApplicationContext(), MainMenuActivity.class));
+        Intent i = new Intent(getApplicationContext(), MainMenuActivity.class);
+        i.putExtra("PriviledgedUser", false);
+        startActivity(i);
     }
 
     private void login() {
@@ -80,13 +97,43 @@ public class MainActivity extends AppCompatActivity {
         EditText pass_in = (EditText) findViewById(R.id.password);
         //query db for actual username/pw here
 
+        List<String> uns = new ArrayList<>();
+        List<String> pws = new ArrayList<>();
+
+    
+
+        List<LoginInfo> infoList = new ArrayList<>();
+
+        try {
+            infoList = db.getAllCredentials();
+            Log.d("STATE", "succesful retrieve");
+            //Log.d("STATE", infoList.get(0).getUn());
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         String inputuser = user_in.getText().toString();
         String inputpass = pass_in.getText().toString();
+
+        Boolean successful = false;
+
+        for (LoginInfo loginfo: infoList){
+            Log.d("DEBUG", loginfo.getUn());
+            Log.d("DEBUG", inputuser);
+            if (inputuser.equals(loginfo.getUn()) && inputpass.equals(loginfo.getPw())){
+                successful = true;
+                break;
+            }
+        }
+
 
         //if returned result is empty
             //show login error
         TextView errMsg = (TextView)findViewById(R.id.ErrorMsg);
-        if (!inputpass.equals(password)){
+        if (!successful){
             //show login error
             errMsg.setVisibility(View.VISIBLE);
         }else{

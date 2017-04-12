@@ -1,8 +1,12 @@
 package com.example.ark.myapplication;
 
+import android.annotation.SuppressLint;
+import android.os.StrictMode;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,16 +20,15 @@ import java.util.List;
 public class DatabaseHandler {
 
     Connection conn;
-    String username, pass, db, ip;
+    String db = "CPSC471_Winter2017";
 
-    public DatabaseHandler(){}
+    public DatabaseHandler(){
+        conn = connectionclass("CPSC471_Winter2017", "6VXVM_0~rq1F-$W", "CPSC471_Winter2017", "136.159.7.84:50001");
+    }
 
-    public DatabaseHandler(Connection connection, String username, String pass, String db, String ip){
+    public DatabaseHandler(Connection connection){
         this.conn = connection;
-        this.username = username;
-        this.pass = pass;
-        this.db  = db;
-        this.ip = ip;
+
     }
 
     private static final String TABLE_PRODUCTS = "PRODUCTS";
@@ -42,16 +45,80 @@ public class DatabaseHandler {
     private static final String TABLE_PROVIDES = "PROVIDES";
     private static final String TABLE_SEARCHES = "SEARCHES";
     private static final String TABLE_EMPLOYEE_SELECTION = "EMPLOYEE_SELECTION";
+    private static final String TABLE_CREDENTIALS = "LOGIN_INFO";
+
+
+
+    //connection class
+    @SuppressLint("NewApi")
+    public Connection connectionclass (String user, String pass, String db, String server){
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        Connection connection = null;
+        String connectionURL = null;
+
+        try{
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            connectionURL = "jdbc:jtds:sqlserver://" + server + ";" + "databseName=" + db + ";user=" + user + ";password=" + pass + ";";
+            connection = DriverManager.getConnection(connectionURL);
+
+        }catch(Exception e){
+            Log.e("Error: ", e.getMessage());
+        }
+
+        return connection;
+    }
+
+
+
+    //For credentials
+    public List<LoginInfo> getAllCredentials() throws SQLException{
+        String query = "SELECT * FROM " + db + ".dbo." + TABLE_CREDENTIALS + ";";
+        List<LoginInfo> infoList = new ArrayList<LoginInfo>();
+
+        Statement stmt = null;
+        try {
+
+            stmt = conn.createStatement();
+            ResultSet result = stmt.executeQuery(query);
+
+            while(result.next()){
+                LoginInfo login = new LoginInfo();
+                login.setUn(result.getString("USERNAME"));
+                login.setPw(result.getString("PASSWORD"));
+
+                infoList.add(login);
+
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if(stmt != null) {stmt.close();}
+        }
+        return infoList;
+    }
+
 
 
      /*
     Insert
      */
 
+     public void addLoginInfo(LoginInfo loginInfo){
+         try {
+             String query = "INSERT INTO " + db + ".dbo." + TABLE_CREDENTIALS + " VALUES ('" + loginInfo.getUn() + "', '" + loginInfo.getPw() + "');";
+             Statement stmt = conn.createStatement();
+             stmt.execute(query);
+         } catch (SQLException e) {
+             e.printStackTrace();
+         }
+     }
 
     public void addProduct (Products product){
         try {
-            String query = "INSERT INTO " + db + "." + TABLE_PRODUCTS + " VALUES (" + product.getCspc() + ", " + product.getPrice() + ", '" + product.getBrand() + "', '" + product.getName() + "', " + product.getQuantity() + ", '" + product.getDiscount() + "', " + product.getOfferedBy() + ");";
+            String query = "INSERT INTO " + db + ".dbo." + TABLE_PRODUCTS + " VALUES (" + product.getCspc() + ", " + product.getPrice() + ", '" + product.getBrand() + "', '" + product.getName() + "', " + product.getQuantity() + ", '" + product.getDiscount() + "', " + product.getOfferedBy() + ");";
             Statement stmt = conn.createStatement();
             stmt.execute(query);
         } catch (SQLException e) {
@@ -98,7 +165,7 @@ public class DatabaseHandler {
 
     public void addStore(Store store) {
         try {
-            String query = "INSERT INTO " + db + "." + TABLE_STORE + " VALUES (" + store.getSid() + ", '" + store.getLocation() + "', " + store.getMgrssn() + ");";
+            String query = "INSERT INTO " + db + ".dbo." + TABLE_STORE + " VALUES (" + store.getSid() + ", '" + store.getLocation() + "', " + store.getMgrssn() + ");";
             Statement stmt = conn.createStatement();
             stmt.execute(query);
         } catch (SQLException e) {
@@ -108,7 +175,7 @@ public class DatabaseHandler {
 
     public void addEmployee(Employee employee) {
         try {
-            String query = "INSERT INTO " + db + "." + TABLE_EMPLOYEE + " VALUES (" + employee.getSsn() + ", '" + employee.getFname() + "', '" + employee.getMname() + "', '" + employee.getLname() + "', " + employee.getMgrssn() + ", " + employee.getWorksFor() + ");";
+            String query = "INSERT INTO " + db + ".dbo." + TABLE_EMPLOYEE + " VALUES (" + employee.getSsn() + ", '" + employee.getFname() + "', '" + employee.getMname() + "', '" + employee.getLname() + "', " + employee.getMgrssn() + ", " + employee.getWorksFor() + ");";
             Statement stmt = conn.createStatement();
             stmt.execute(query);
         } catch (SQLException e) {
@@ -118,7 +185,7 @@ public class DatabaseHandler {
 
     public void addCustomer(Customer customer) {
         try {
-            String query = "INSERT INTO " + db + "." + TABLE_CUSTOMER + " VALUES (" + customer.getCid() + ", '" + customer.getFname() + "', '" + customer.getLname() + "', '" + customer.getPhoneNumber() + "', '" + customer.getDiscount() + "');";
+            String query = "INSERT INTO " + db + ".dbo." + TABLE_CUSTOMER + " VALUES (" + customer.getCid() + ", '" + customer.getFname() + "', '" + customer.getLname() + "', '" + customer.getPhoneNumber() + "', '" + customer.getDiscount() + "');";
             Statement stmt = conn.createStatement();
             stmt.execute(query);
         } catch (SQLException e) {
@@ -128,7 +195,7 @@ public class DatabaseHandler {
 
     public void addDistributor(Distributor distributor) {
         try {
-            String query = "INSERT INTO " + db + "." + TABLE_DISTRIBUTOR + " VALUES (" + distributor.getDid() + ", '" + distributor.getName() + "', " + distributor.getSupplies() + ");";
+            String query = "INSERT INTO " + db + ".dbo." + TABLE_DISTRIBUTOR + " VALUES (" + distributor.getDid() + ", '" + distributor.getName() + "', " + distributor.getSupplies() + ");";
             Statement stmt = conn.createStatement();
             stmt.execute(query);
         } catch (SQLException e) {
@@ -138,7 +205,7 @@ public class DatabaseHandler {
 
     public void addOrder(Order order) {
         try {
-            String query = "INSERT INTO " + db + "." + TABLE_ORDER + " VALUES (" + order.getOid() + ", '" + order.getApproved() + "', " + order.getCreatedBy() + ", " + order.getFulfilledBy() + ");";
+            String query = "INSERT INTO " + db + ".dbo." + TABLE_ORDER + " VALUES (" + order.getOid() + ", '" + order.getApproved() + "', " + order.getCreatedBy() + ", " + order.getFulfilledBy() + ");";
             Statement stmt = conn.createStatement();
             stmt.execute(query);
         } catch (SQLException e) {
@@ -151,7 +218,7 @@ public class DatabaseHandler {
 
     public void addContains(int cpcspc, int ooid){
         try {
-            String query = "INSERT INTO " + db + "." + TABLE_CONTAINS + " VALUES (" + cpcspc + ", " + ooid + ");";
+            String query = "INSERT INTO " + db + ".dbo." + TABLE_CONTAINS + " VALUES (" + cpcspc + ", " + ooid + ");";
             Statement stmt = conn.createStatement();
             stmt.execute(query);
         } catch (SQLException e) {
@@ -161,7 +228,7 @@ public class DatabaseHandler {
 
     public void addManages(int essn, int mgrssn){
         try {
-            String query = "INSERT INTO " + db + "." + TABLE_MANAGES + " VALUES (" + essn + ", " + mgrssn + ");";
+            String query = "INSERT INTO " + db + ".dbo." + TABLE_MANAGES + " VALUES (" + essn + ", " + mgrssn + ");";
             Statement stmt = conn.createStatement();
             stmt.execute(query);
         } catch (SQLException e) {
@@ -171,7 +238,7 @@ public class DatabaseHandler {
 
     public void addProvides(int ppcspc, int ddid){
         try {
-            String query = "INSERT INTO " + db + "." + TABLE_PROVIDES + " VALUES (" + ppcspc + ", " + ddid + ");";
+            String query = "INSERT INTO " + db + ".dbo." + TABLE_PROVIDES + " VALUES (" + ppcspc + ", " + ddid + ");";
             Statement stmt = conn.createStatement();
             stmt.execute(query);
         } catch (SQLException e) {
@@ -181,7 +248,7 @@ public class DatabaseHandler {
 
     public void addSearches(int essn, int cusid, int spcspc){
         try {
-            String query = "INSERT INTO " + db + "." + TABLE_SEARCHES + " VALUES (" + essn + ", " + cusid + ", " + spcspc + ");";
+            String query = "INSERT INTO " + db + ".dbo." + TABLE_SEARCHES + " VALUES (" + essn + ", " + cusid + ", " + spcspc + ");";
             Statement stmt = conn.createStatement();
             stmt.execute(query);
         } catch (SQLException e) {
@@ -193,7 +260,7 @@ public class DatabaseHandler {
     //TODO?
     public void addEmployeeSelection(int essn, Products product){
         try {
-            String query = "INSERT INTO " + db + "." + TABLE_EMPLOYEE_SELECTION + " VALUES (" + essn + ", " + product.getCspc() + ", " + product.getPrice() + ", '" + product.getBrand() + "', '" + product.getName() + "', " + product.getQuantity() + ", '" + product.getDiscount() + "', " + product.getOfferedBy() + ");";
+            String query = "INSERT INTO " + db + ".dbo." + TABLE_EMPLOYEE_SELECTION + " VALUES (" + essn + ", " + product.getCspc() + ", " + product.getPrice() + ", '" + product.getBrand() + "', '" + product.getName() + "', " + product.getQuantity() + ", '" + product.getDiscount() + "', " + product.getOfferedBy() + ");";
             Statement stmt = conn.createStatement();
             stmt.execute(query);
         } catch (SQLException e) {
@@ -306,7 +373,7 @@ public class DatabaseHandler {
     }
 
     public Store getStore(int sid){
-        String query = "SELECT * FROM " + db + "." + TABLE_STORE + " WHERE SID = " + sid + ";";
+        String query = "SELECT * FROM " + db + ".dbo." + TABLE_STORE + " WHERE SID = " + sid + ";";
         Store store = new Store();
         try {
 
@@ -327,7 +394,7 @@ public class DatabaseHandler {
 
 
     public Employee getEmployee(int ssn){
-        String query = "SELECT * FROM " + db + "." + TABLE_EMPLOYEE + " WHERE SSN = " + ssn + ";";
+        String query = "SELECT * FROM " + db + ".dbo." + TABLE_EMPLOYEE + " WHERE SSN = " + ssn + ";";
         Employee employee = new Employee();
         try {
 
@@ -352,7 +419,7 @@ public class DatabaseHandler {
 
 
     public Customer getCustomer(int cid){
-        String query = "SELECT * FROM " + db + "." + TABLE_CUSTOMER + " WHERE CID = " + cid + ";";
+        String query = "SELECT * FROM " + db + ".dbo." + TABLE_CUSTOMER + " WHERE CID = " + cid + ";";
         Customer customer = new Customer();
         try {
 
@@ -374,7 +441,7 @@ public class DatabaseHandler {
     }
 
     public Distributor getDistributor(int did){
-        String query = "SELECT * FROM " + db + "." + TABLE_DISTRIBUTOR + " WHERE DID = " + did + ";";
+        String query = "SELECT * FROM " + db + ".dbo." + TABLE_DISTRIBUTOR + " WHERE DID = " + did + ";";
         Distributor distributor = new Distributor();
         try {
 
@@ -395,7 +462,7 @@ public class DatabaseHandler {
 
 
     public Order getOrder(int oid){
-        String query = "SELECT * FROM " + db + "." + TABLE_ORDER + " WHERE OID = " + oid + ";";
+        String query = "SELECT * FROM " + db + ".dbo." + TABLE_ORDER + " WHERE OID = " + oid + ";";
         Order order = new Order();
         try {
 
@@ -419,7 +486,7 @@ public class DatabaseHandler {
 
     //TODO?
     public Products getEmployeeSelection(int ssn){
-        String query = "SELECT * FROM " + db + "." + TABLE_EMPLOYEE_SELECTION + " WHERE ESSN = " + ssn + ";";
+        String query = "SELECT * FROM " + db + ".dbo." + TABLE_EMPLOYEE_SELECTION + " WHERE ESSN = " + ssn + ";";
         Products product = new Products();
         try {
 
@@ -565,7 +632,7 @@ public class DatabaseHandler {
 
 
     public List<Store> getAllStores() throws SQLException {
-        String query = "SELECT * FROM " + db + "." + TABLE_STORE + ";";
+        String query = "SELECT * FROM " + db + ".dbo." + TABLE_STORE + ";";
         List<Store> storeList = new ArrayList<Store>();
 
         Statement stmt = null;
@@ -592,7 +659,7 @@ public class DatabaseHandler {
     }
 
     public List<Employee> getAllEmployees() throws SQLException {
-        String query = "SELECT * FROM " + db + "." + TABLE_EMPLOYEE + ";";
+        String query = "SELECT * FROM " + db + ".dbo." + TABLE_EMPLOYEE + ";";
         List<Employee> employeeList = new ArrayList<Employee>();
 
         Statement stmt = null;
@@ -623,7 +690,7 @@ public class DatabaseHandler {
 
 
     public List<Customer> getAllCustomers() throws SQLException {
-        String query = "SELECT * FROM " + db + "." + TABLE_CUSTOMER + ";";
+        String query = "SELECT * FROM " + db + ".dbo." + TABLE_CUSTOMER + ";";
         List<Customer> customerList = new ArrayList<Customer>();
 
         Statement stmt = null;
@@ -653,7 +720,7 @@ public class DatabaseHandler {
     }
 
     public List<Distributor> getAllDistributors() throws SQLException {
-        String query = "SELECT * FROM " + db + "." + TABLE_DISTRIBUTOR + ";";
+        String query = "SELECT * FROM " + db + ".dbo." + TABLE_DISTRIBUTOR + ";";
         List<Distributor> distributorList = new ArrayList<Distributor>();
 
         Statement stmt = null;
@@ -682,7 +749,7 @@ public class DatabaseHandler {
 
 
     public List<Order> getAllOrders() throws SQLException {
-        String query = "SELECT * FROM " + db + "." + TABLE_ORDER + ";";
+        String query = "SELECT * FROM " + db + ".dbo." + TABLE_ORDER + ";";
         List<Order> orderList = new ArrayList<Order>();
 
         Statement stmt = null;
@@ -723,12 +790,12 @@ public class DatabaseHandler {
 
     public int getProductCount(){
         int count = 0;
-        String query = "SELECT COUNT(*) AS rowcount FROM " + db + "." + TABLE_PRODUCTS + ";";
+        String query = "SELECT COUNT(*) AS total FROM " + db + ".dbo." + TABLE_PRODUCTS + ";";
         try {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
             result.next();
-            count = result.getInt("rowcount");
+            count = result.getInt("total");
             result.close();
 
 
@@ -757,12 +824,12 @@ public class DatabaseHandler {
 
     public int getNonLiquorCount(){
         int count = 0;
-        String query = "SELECT COUNT(*) AS rowcount FROM " + db + "." + TABLE_NON_LIQUOR + ";";
+        String query = "SELECT COUNT(*) AS total FROM " + db + ".dbo." + TABLE_NON_LIQUOR + ";";
         try {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
             result.next();
-            count = result.getInt("rowcount");
+            count = result.getInt("total");
             result.close();
 
 
@@ -772,12 +839,12 @@ public class DatabaseHandler {
 
     public int getMiscCount(){
         int count = 0;
-        String query = "SELECT COUNT(*) AS rowcount FROM " + db + "." + TABLE_MISC + ";";
+        String query = "SELECT COUNT(*) AS total FROM " + db + ".dbo." + TABLE_MISC + ";";
         try {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
             result.next();
-            count = result.getInt("rowcount");
+            count = result.getInt("total");
             result.close();
 
 
@@ -787,12 +854,12 @@ public class DatabaseHandler {
 
     public int getStoreCount(){
         int count = 0;
-        String query = "SELECT COUNT(*) AS rowcount FROM " + db + "." + TABLE_STORE + ";";
+        String query = "SELECT COUNT(*) AS total FROM " + db + ".dbo." + TABLE_STORE + ";";
         try {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
             result.next();
-            count = result.getInt("rowcount");
+            count = result.getInt("total");
             result.close();
 
 
@@ -803,12 +870,12 @@ public class DatabaseHandler {
 
     public int getEmployeeCount(){
         int count = 0;
-        String query = "SELECT COUNT(*) AS rowcount FROM " + db + "." + TABLE_EMPLOYEE + ";";
+        String query = "SELECT COUNT(*) AS total FROM " + db + ".dbo." + TABLE_EMPLOYEE + ";";
         try {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
             result.next();
-            count = result.getInt("rowcount");
+            count = result.getInt("total");
             result.close();
 
 
@@ -819,12 +886,12 @@ public class DatabaseHandler {
 
     public int getCustomerCount(){
         int count = 0;
-        String query = "SELECT COUNT(*) AS rowcount FROM " + db + "." + TABLE_CUSTOMER + ";";
+        String query = "SELECT COUNT(*) AS total FROM " + db + ".dbo." + TABLE_CUSTOMER + ";";
         try {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
             result.next();
-            count = result.getInt("rowcount");
+            count = result.getInt("total");
             result.close();
 
 
@@ -834,12 +901,12 @@ public class DatabaseHandler {
 
     public int getDistributorCount(){
         int count = 0;
-        String query = "SELECT COUNT(*) AS rowcount FROM " + db + "." + TABLE_DISTRIBUTOR + ";";
+        String query = "SELECT COUNT(*) AS total FROM " + db + ".dbo." + TABLE_DISTRIBUTOR + ";";
         try {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
             result.next();
-            count = result.getInt("rowcount");
+            count = result.getInt("total");
             result.close();
 
 
@@ -849,12 +916,12 @@ public class DatabaseHandler {
 
     public int getOrderCount(){
         int count = 0;
-        String query = "SELECT COUNT(*) AS rowcount FROM " + db + "." + TABLE_ORDER + ";";
+        String query = "SELECT COUNT(*) AS total FROM " + db + ".dbo." + TABLE_ORDER + ";";
         try {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
             result.next();
-            count = result.getInt("rowcount");
+            count = result.getInt("total");
             result.close();
 
 
@@ -866,12 +933,12 @@ public class DatabaseHandler {
 
     public int getEmployeeSelectionCount(){
         int count = 0;
-        String query = "SELECT COUNT(*) AS rowcount FROM " + db + "." + TABLE_EMPLOYEE_SELECTION + ";";
+        String query = "SELECT COUNT(*) AS total FROM " + db + ".dbo." + TABLE_EMPLOYEE_SELECTION + ";";
         try {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
             result.next();
-            count = result.getInt("rowcount");
+            count = result.getInt("total");
             result.close();
 
 
@@ -884,7 +951,7 @@ public class DatabaseHandler {
      */
 
     public void updateProduct(Products product) {
-        String query = "UPDATE " + db + "." + TABLE_PRODUCTS + " SET PRICE = " + product.getPrice() + ", BRAND = '" + product.getBrand() + "', NAME = '" + product.getName() + "', QUANTITY = " + product.getQuantity() + ", DISCOUNT = '" + product.getDiscount() + "', OFFERED_BY = " + product.getOfferedBy()+ " WHERE CSPC = " + product.getCspc() + ";";
+        String query = "UPDATE " + db + ".dbo." + TABLE_PRODUCTS + " SET PRICE = " + product.getPrice() + ", BRAND = '" + product.getBrand() + "', NAME = '" + product.getName() + "', QUANTITY = " + product.getQuantity() + ", DISCOUNT = '" + product.getDiscount() + "', OFFERED_BY = " + product.getOfferedBy()+ " WHERE CSPC = " + product.getCspc() + ";";
         try{
             Statement stmt = conn.createStatement();
             stmt.execute(query);
@@ -895,7 +962,7 @@ public class DatabaseHandler {
 
     //Special cases
     public void updateLiquor(Products product) {
-        String query = "UPDATE " + db + "." + TABLE_LIQUOR + " SET PRICE = " + product.getPrice() + ", BRAND = '" + product.getBrand() + "', NAME = '" + product.getName() + "', QUANTITY = " + product.getQuantity() + ", DISCOUNT = '" + product.getDiscount() + "', OFFERED_BY = " + product.getOfferedBy() + " WHERE CSPC = " + product.getCspc() + ";";
+        String query = "UPDATE " + db + ".dbo." + TABLE_LIQUOR + " SET PRICE = " + product.getPrice() + ", BRAND = '" + product.getBrand() + "', NAME = '" + product.getName() + "', QUANTITY = " + product.getQuantity() + ", DISCOUNT = '" + product.getDiscount() + "', OFFERED_BY = " + product.getOfferedBy() + " WHERE CSPC = " + product.getCspc() + ";";
         try{
             Statement stmt = conn.createStatement();
             stmt.execute(query);
@@ -905,7 +972,7 @@ public class DatabaseHandler {
     }
 
     public void updateNonLiquor(Products product) {
-        String query = "UPDATE " + db + "." + TABLE_NON_LIQUOR + " SET PRICE = " + product.getPrice() + ", BRAND = '" + product.getBrand() + "', NAME = '" + product.getName() + "', QUANTITY = " + product.getQuantity() + ", DISCOUNT = '" + product.getDiscount() + "', OFFERED_BY = " + product.getOfferedBy() + " WHERE CSPC = " + product.getCspc() + ";";
+        String query = "UPDATE " + db + ".dbo." + TABLE_NON_LIQUOR + " SET PRICE = " + product.getPrice() + ", BRAND = '" + product.getBrand() + "', NAME = '" + product.getName() + "', QUANTITY = " + product.getQuantity() + ", DISCOUNT = '" + product.getDiscount() + "', OFFERED_BY = " + product.getOfferedBy() + " WHERE CSPC = " + product.getCspc() + ";";
         try{
             Statement stmt = conn.createStatement();
             stmt.execute(query);
@@ -915,7 +982,7 @@ public class DatabaseHandler {
     }
 
     public void updateMisc(Products product) {
-        String query = "UPDATE " + db + "." + TABLE_MISC + " SET PRICE = " + product.getPrice() + ", BRAND = '" + product.getBrand() + "', NAME = '" + product.getName() + "', QUANTITY = " + product.getQuantity() + ", DISCOUNT = '" + product.getDiscount() + "', OFFERED_BY = " + product.getOfferedBy() + " WHERE CSPC = " + product.getCspc() + ";";
+        String query = "UPDATE " + db + ".dbo." + TABLE_MISC + " SET PRICE = " + product.getPrice() + ", BRAND = '" + product.getBrand() + "', NAME = '" + product.getName() + "', QUANTITY = " + product.getQuantity() + ", DISCOUNT = '" + product.getDiscount() + "', OFFERED_BY = " + product.getOfferedBy() + " WHERE CSPC = " + product.getCspc() + ";";
         try{
             Statement stmt = conn.createStatement();
             stmt.execute(query);
@@ -926,7 +993,7 @@ public class DatabaseHandler {
 
 
     public void updateStore(Store store) {
-        String query = "UPDATE " + db + "." + TABLE_STORE + " SET LOCATION = '" + store.getLocation() + "', MGRSSN = " + store.getMgrssn()  + " WHERE SID = " + store.getSid() + ";";
+        String query = "UPDATE " + db + ".dbo." + TABLE_STORE + " SET LOCATION = '" + store.getLocation() + "', MGRSSN = " + store.getMgrssn()  + " WHERE SID = " + store.getSid() + ";";
         try{
             Statement stmt = conn.createStatement();
             stmt.execute(query);
@@ -936,7 +1003,7 @@ public class DatabaseHandler {
     }
 
     public void updateEmployee(Employee employee) {
-        String query = "UPDATE " + db + "." + TABLE_EMPLOYEE + " SET FNAME = '" + employee.getFname() + "', MNAME = '" + employee.getMname()  + "', LNAME = '" + employee.getLname() + "', MGRSSN = " + employee.getMgrssn() + ", WORKS_FOR = " + employee.getWorksFor() + " WHERE SSN = " + employee.getSsn() + ";";
+        String query = "UPDATE " + db + ".dbo." + TABLE_EMPLOYEE + " SET FNAME = '" + employee.getFname() + "', MNAME = '" + employee.getMname()  + "', LNAME = '" + employee.getLname() + "', MGRSSN = " + employee.getMgrssn() + ", WORKS_FOR = " + employee.getWorksFor() + " WHERE SSN = " + employee.getSsn() + ";";
         try{
             Statement stmt = conn.createStatement();
             stmt.execute(query);
@@ -947,7 +1014,7 @@ public class DatabaseHandler {
 
 
     public void updateCustomer(Customer customer) {
-        String query = "UPDATE " + db + "." + TABLE_CUSTOMER + " SET FNAME = '" + customer.getFname() + "', LNAME = '" + customer.getLname() + "', PHONE_NUMBER = '" + customer.getPhoneNumber() + "', DISCOUNT = '" + customer.getDiscount() + "' WHERE CID = " + customer.getCid() + ";";
+        String query = "UPDATE " + db + ".dbo." + TABLE_CUSTOMER + " SET FNAME = '" + customer.getFname() + "', LNAME = '" + customer.getLname() + "', PHONE_NUMBER = '" + customer.getPhoneNumber() + "', DISCOUNT = '" + customer.getDiscount() + "' WHERE CID = " + customer.getCid() + ";";
         try{
             Statement stmt = conn.createStatement();
             stmt.execute(query);
@@ -958,7 +1025,7 @@ public class DatabaseHandler {
 
 
     public void updateDistributor(Distributor distributor) {
-        String query = "UPDATE " + db + "." + TABLE_DISTRIBUTOR + " SET NAME = '" + distributor.getName() + "', SUPPLIES = " + distributor.getSupplies() + " WHERE DID = " + distributor.getDid() + ";";
+        String query = "UPDATE " + db + ".dbo." + TABLE_DISTRIBUTOR + " SET NAME = '" + distributor.getName() + "', SUPPLIES = " + distributor.getSupplies() + " WHERE DID = " + distributor.getDid() + ";";
         try{
             Statement stmt = conn.createStatement();
             stmt.execute(query);
@@ -969,7 +1036,7 @@ public class DatabaseHandler {
 
 
     public void updateOrder(Order order) {
-        String query = "UPDATE " + db + "." + TABLE_ORDER + " SET APPROVED = '" + order.getApproved() + "', CREATED_BY = " + order.getCreatedBy()  + ", FULFILLED_BY = " + order.getFulfilledBy() + " WHERE OID = " + order.getOid() + ";";
+        String query = "UPDATE " + db + ".dbo." + TABLE_ORDER + " SET APPROVED = '" + order.getApproved() + "', CREATED_BY = " + order.getCreatedBy()  + ", FULFILLED_BY = " + order.getFulfilledBy() + " WHERE OID = " + order.getOid() + ";";
         try{
             Statement stmt = conn.createStatement();
             stmt.execute(query);
@@ -981,7 +1048,7 @@ public class DatabaseHandler {
     //TODO make relationship updates
 
     public void updateEmployeeSelection(int essn, Products product){
-        String query = "UPDATE " + db + "." + TABLE_EMPLOYEE_SELECTION + " SET CSPC = " + product.getCspc() + ", PRICE = " + product.getPrice() + ", BRAND = '" + product.getBrand() + "', NAME = '" + product.getName() + "', QUANTITY = " + product.getQuantity() + ", DISCOUNT = '" + product.getDiscount() + "', OFFERED_BY = " + product.getOfferedBy()+ " WHERE ESSN = " + essn + ";";
+        String query = "UPDATE " + db + ".dbo." + TABLE_EMPLOYEE_SELECTION + " SET CSPC = " + product.getCspc() + ", PRICE = " + product.getPrice() + ", BRAND = '" + product.getBrand() + "', NAME = '" + product.getName() + "', QUANTITY = " + product.getQuantity() + ", DISCOUNT = '" + product.getDiscount() + "', OFFERED_BY = " + product.getOfferedBy()+ " WHERE ESSN = " + essn + ";";
         try{
             Statement stmt = conn.createStatement();
             stmt.execute(query);
@@ -1026,7 +1093,7 @@ public class DatabaseHandler {
     }
 
     public void deleteMisc(Products product){
-        String query = "DELETE FROM " + db + "." + TABLE_MISC + " WHERE CSPC = " + product.getCspc() + ";";
+        String query = "DELETE FROM " + db + ".dbo." + TABLE_MISC + " WHERE CSPC = " + product.getCspc() + ";";
         try {
             Statement stmt = conn.createStatement();
             stmt.execute(query);
@@ -1037,7 +1104,7 @@ public class DatabaseHandler {
 
 
     public void deleteStore(Store store){
-        String query = "DELETE FROM " + db + "." + TABLE_STORE + " WHERE SID = " + store.getSid() + ";";
+        String query = "DELETE FROM " + db + ".dbo." + TABLE_STORE + " WHERE SID = " + store.getSid() + ";";
         try {
             Statement stmt = conn.createStatement();
             stmt.execute(query);
@@ -1047,7 +1114,7 @@ public class DatabaseHandler {
     }
 
     public void deleteEmployee(Employee employee){
-        String query = "DELETE FROM " + db + "." + TABLE_EMPLOYEE + " WHERE SSN = " + employee.getSsn() + ";";
+        String query = "DELETE FROM " + db + ".dbo." + TABLE_EMPLOYEE + " WHERE SSN = " + employee.getSsn() + ";";
         try {
             Statement stmt = conn.createStatement();
             stmt.execute(query);
@@ -1058,7 +1125,7 @@ public class DatabaseHandler {
 
 
     public void deleteCustomer(Customer customer){
-        String query = "DELETE FROM " + db + "." + TABLE_CUSTOMER + " WHERE CID = " + customer.getCid() + ";";
+        String query = "DELETE FROM " + db + ".dbo." + TABLE_CUSTOMER + " WHERE CID = " + customer.getCid() + ";";
         try {
             Statement stmt = conn.createStatement();
             stmt.execute(query);
@@ -1068,7 +1135,7 @@ public class DatabaseHandler {
     }
 
     public void deleteDistributor(Distributor distributor){
-        String query = "DELETE FROM " + db + "." + TABLE_DISTRIBUTOR + " WHERE DID = " + distributor.getDid() + ";";
+        String query = "DELETE FROM " + db + ".dbo." + TABLE_DISTRIBUTOR + " WHERE DID = " + distributor.getDid() + ";";
         try {
             Statement stmt = conn.createStatement();
             stmt.execute(query);
@@ -1078,7 +1145,7 @@ public class DatabaseHandler {
     }
 
     public void deleteOrder(Order order){
-        String query = "DELETE FROM " + db + "." + TABLE_ORDER + " WHERE OID = " + order.getOid() + ";";
+        String query = "DELETE FROM " + db + ".dbo." + TABLE_ORDER + " WHERE OID = " + order.getOid() + ";";
         try {
             Statement stmt = conn.createStatement();
             stmt.execute(query);
@@ -1090,7 +1157,7 @@ public class DatabaseHandler {
     //TODO make delete relationships
 
     public void deleteEmployeeSelection(int essn, Products product){
-        String query = "DELETE FROM " + db + "." + TABLE_EMPLOYEE_SELECTION + " WHERE ESSN = " + essn + ";";
+        String query = "DELETE FROM " + db + ".dbo." + TABLE_EMPLOYEE_SELECTION + " WHERE ESSN = " + essn + ";";
         try {
             Statement stmt = conn.createStatement();
             stmt.execute(query);
@@ -1098,5 +1165,10 @@ public class DatabaseHandler {
             e.printStackTrace();
         }
     }
+
+
+
+
+
 
 }

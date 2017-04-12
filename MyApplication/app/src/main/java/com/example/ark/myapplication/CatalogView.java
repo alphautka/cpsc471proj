@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,6 +16,8 @@ import java.util.List;
 
 public class CatalogView extends AppCompatActivity {
 
+    boolean isPriviledged;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +26,28 @@ public class CatalogView extends AppCompatActivity {
         String type = getIntent().getStringExtra("prod_type");
 
         String labelText = "";
+
+
+
+        Button logoutButton = (Button)findViewById(R.id.logoutButton);
+
+        isPriviledged = getIntent().getBooleanExtra("PriviledgedUser", false);
+
+        if (isPriviledged) {
+            logoutButton.setVisibility(View.VISIBLE);
+            logoutButton.setEnabled(true);
+        }
+
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                logout();
+            }
+        });
+
+
+
+
 
         List<? extends Products> list = null;
 
@@ -42,6 +67,7 @@ public class CatalogView extends AppCompatActivity {
             }
         }else if(type.equals("Misc")){
             labelText = "Misc.";
+
             try {
                 list = MainActivity.db.getAllMiscs();
             } catch (SQLException e) {
@@ -51,13 +77,16 @@ public class CatalogView extends AppCompatActivity {
             labelText = "Employee Picks";
             try{
                 list = MainActivity.db.getAllEmployeeSelections();
+
             }catch(SQLException e){
                 e.printStackTrace();
             }
         }
+
         else{
             System.out.println("wrong args passed to CatalogView");
         }
+
 
         TextView typeLabel = (TextView)findViewById(R.id.TypeLabel);
         typeLabel.setText(labelText);
@@ -94,9 +123,19 @@ public class CatalogView extends AppCompatActivity {
 
     void detailView(Products p){
         Intent i = new Intent(getApplicationContext(), DetailedItemView.class);
+
         i.putExtra("price", p.getPrice());
         i.putExtra("discount", p.getDiscount());
         i.putExtra("qty", p.getQuantity());
+
+
+        i.putExtra("PriviledgedUser", isPriviledged);
+        startActivity(i);
+    }
+
+    private void logout(){
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        i.putExtra("PriviledgedUser", false);
 
         startActivity(i);
     }
