@@ -124,7 +124,7 @@ public class MainMenuActivity extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), CatalogView.class);
         i.putExtra("prod_type", "Fav");
         startActivity(i);
-    }
+
 
         i.putExtra("PriviledgedUser", isPriviledged);
         startActivity(i);

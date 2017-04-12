@@ -3,6 +3,7 @@ package com.example.ark.myapplication;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -10,12 +11,14 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CatalogView extends AppCompatActivity {
 
+    String curProdType = "";
     boolean isPriviledged;
 
     @Override
@@ -50,23 +53,33 @@ public class CatalogView extends AppCompatActivity {
 
 
         List<? extends Products> list = null;
+        ArrayList<Products> plist = new ArrayList();
 
         if (type.equals("Liquor")){
             labelText = "Liquor";
             try {
+
                 list = MainActivity.db.getAllLiquors();
+
+                for (int i = 0; i < list.size(); i++){
+                    Products product = MainActivity.db.getProduct(list.get(i).getCspc());
+                    System.out.println(product.getBrand());
+                    plist.add(product);
+                }
+
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }else if(type.equals("Non-Liquor")){
-            labelText = "Non-Liquor";
+            curProdType = labelText = "Non-Liquor";
             try {
                 list = MainActivity.db.getAllNonLiquors();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }else if(type.equals("Misc")){
-            labelText = "Misc.";
+            curProdType = labelText = "Misc.";
 
             try {
                 list = MainActivity.db.getAllMiscs();
@@ -74,7 +87,7 @@ public class CatalogView extends AppCompatActivity {
                 e.printStackTrace();
             }
         }else if(type.equals("Fav")) {
-            labelText = "Employee Picks";
+            curProdType = labelText = "Employee Picks";
             try{
                 list = MainActivity.db.getAllEmployeeSelections();
 
@@ -108,7 +121,7 @@ public class CatalogView extends AppCompatActivity {
         LinearLayout catalogList = (LinearLayout)findViewById(R.id.catalogLayout);
 
 
-        for(Products p : testlist){
+        for(Products p : plist){
             CatalogActivity temp = new CatalogActivity(this);
             temp.setName(p);
             temp.setBrand(p);
@@ -127,6 +140,10 @@ public class CatalogView extends AppCompatActivity {
         i.putExtra("price", p.getPrice());
         i.putExtra("discount", p.getDiscount());
         i.putExtra("qty", p.getQuantity());
+        i.putExtra("name", p.getName());
+        i.putExtra("brand", p.getBrand());
+        i.putExtra("cpsc", p.getCspc());
+        i.putExtra("prod_type", curProdType);
 
 
         i.putExtra("PriviledgedUser", isPriviledged);

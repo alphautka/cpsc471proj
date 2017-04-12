@@ -281,13 +281,13 @@ public class DatabaseHandler {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
-
+            result.next();
             product.setCspc(result.getInt("CSPC"));
             product.setPrice(result.getFloat("PRICE"));
             product.setBrand(result.getString("BRAND"));
             product.setName(result.getString("NAME"));
             product.setQuantity(result.getInt("QUANTITY"));
-            product.setDiscount(result.getString("DOUBLE"));
+            product.setDiscount(result.getString("DISCOUNT"));
             product.setOfferedBy(result.getInt("OFFERED_BY"));
 
 
@@ -325,7 +325,7 @@ public class DatabaseHandler {
 
     public Products getNonLiquor(int cspc){
         String query = "SELECT * FROM " + db + ".dbo." + TABLE_NON_LIQUOR + " WHERE CSPC = " + cspc + ";";
-        Products product = new Products();
+        Non_Liquor product = new Non_Liquor();
         try {
 
             Statement stmt = conn.createStatement();
@@ -337,7 +337,7 @@ public class DatabaseHandler {
             product.setBrand(result.getString("BRAND"));
             product.setName(result.getString("NAME"));
             product.setQuantity(result.getInt("QUANTITY"));
-            product.setDiscount(result.getString("DOUBLE"));
+            product.setDiscount(result.getString("DISCOUNT"));
             product.setOfferedBy(result.getInt("OFFERED_BY"));
 
 
@@ -706,7 +706,7 @@ public class DatabaseHandler {
                 customer.setLname(result.getString("LNAME"));
                 customer.setPhoneNumber(result.getString("PHONE_NUMBER"));
                 customer.setDiscount(result.getString("DISCOUNT"));
-
+                customerList.add(customer);
 
             }
 
@@ -1126,6 +1126,16 @@ public class DatabaseHandler {
 
     public void deleteCustomer(Customer customer){
         String query = "DELETE FROM " + db + ".dbo." + TABLE_CUSTOMER + " WHERE CID = " + customer.getCid() + ";";
+        try {
+            Statement stmt = conn.createStatement();
+            stmt.execute(query);
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteCustomer(int cId){
+        String query = "DELETE FROM " + db + ".dbo." + TABLE_CUSTOMER + " WHERE CID = " + cId + ";";
         try {
             Statement stmt = conn.createStatement();
             stmt.execute(query);

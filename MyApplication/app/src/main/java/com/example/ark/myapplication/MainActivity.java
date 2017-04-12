@@ -47,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
         String pass = "6VXVM_0~rq1F-$W";  //enter password here
         Connection conn = connectionclass(ip, dbName, un, pass);
 
-        db = new DatabaseHandler(conn, ip, dbName, un, pass);
+        //db = new DatabaseHandler(conn, ip, dbName, un, pass);
+        //db = new DatabaseHandler(conn);
+        db = new DatabaseHandler();
 
 
         Button loginButton = (Button)findViewById(R.id.loginButton);
