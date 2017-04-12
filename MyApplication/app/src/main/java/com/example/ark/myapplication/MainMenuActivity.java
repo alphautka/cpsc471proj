@@ -50,9 +50,10 @@ public class MainMenuActivity extends AppCompatActivity {
         nliquorList = new ArrayList<>();
         miscList = new ArrayList<>();
 
-        final Button liquorButton = (Button)findViewById(R.id.liquorButton);
+        Button liquorButton = (Button)findViewById(R.id.liquorButton);
         Button nonLiquorButton = (Button)findViewById(R.id.nonLiquorButton);
         Button miscButton = (Button)findViewById(R.id.miscButton);
+        Button favButton = (Button)findViewById(R.id.favoritesButton);
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
@@ -76,6 +77,14 @@ public class MainMenuActivity extends AppCompatActivity {
             public void onClick(View view) {
                 miscellaneous();
         } });
+
+
+        favButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                favs();
+            }
+        });
+
     }
 
 
@@ -83,13 +92,16 @@ public class MainMenuActivity extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         i.putExtra("PriviledgedUser", false);
         startActivity(i);
+
     }
 
     private void miscellaneous(){
         //startActivity(new Intent(getApplicationContext(), CatalogListActivity.class));
         Intent i = new Intent(getApplicationContext(), CatalogView.class);
         i.putExtra("prod_type", "Misc");
+
         i.putExtra("PriviledgedUser", isPriviledged);
+
         startActivity(i);
     }
 
@@ -104,9 +116,20 @@ public class MainMenuActivity extends AppCompatActivity {
         //startActivity(new Intent(getApplicationContext(), CatalogListActivity.class));
         Intent i = new Intent(getApplicationContext(), CatalogView.class);
         i.putExtra("prod_type", "Non-Liquor");
+
+        startActivity(i);
+    }
+
+    private void favs(){
+        Intent i = new Intent(getApplicationContext(), CatalogView.class);
+        i.putExtra("prod_type", "Fav");
+        startActivity(i);
+    }
+
         i.putExtra("PriviledgedUser", isPriviledged);
         startActivity(i);
     }
+
 
 
 

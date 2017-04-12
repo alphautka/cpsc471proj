@@ -28,11 +28,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static DatabaseHandler dbh;
 
-    Connection conn;
-    String un, pass, db, ip;
-
+    public static DatabaseHandler db;
 
 
     @Override
@@ -44,11 +41,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        String ip = "136.159.7.84:50001";    //enter ip address here
+        String dbName = "CPSC471_Winter2017";    //emter database name here
+        String un = "CPSC471_Winter2017";    //enter username here
+        String pass = "6VXVM_0~rq1F-$W";  //enter password here
+        Connection conn = connectionclass(ip, dbName, un, pass);
 
-        ip = "136.159.7.84:50001";    //enter ip address here
-        db = "CPSC471_Winter2017";    //emter database name here
-        un = "CPSC471_Winter2017";    //enter username here
-        pass = "6VXVM_0~rq1F-$W";  //enter password here
+        db = new DatabaseHandler(conn, ip, dbName, un, pass);
 
 
         Button loginButton = (Button)findViewById(R.id.loginButton);
@@ -69,12 +68,13 @@ public class MainActivity extends AppCompatActivity {
 
         //NOTE: Fill these attributes before you execute this program
         //NOTE: For ip address, if you are provided with a port number, the format will be "ipaddress:portnumber"
+
         /*ip = "136.159.7.84:50001";    //enter ip address here
         db = "CPSC471_Winter2017";    //emter database name here
         un = "CPSC471_Winter2017";    //enter username here
         pass = "6VXVM_0~rq1F-$W";  //enter password here*/
 
-        conn = dbh.connectionclass(un, pass, db, ip);
+  
     }
 
     private void guest() {
@@ -100,12 +100,12 @@ public class MainActivity extends AppCompatActivity {
         List<String> uns = new ArrayList<>();
         List<String> pws = new ArrayList<>();
 
-        DatabaseHandler dbh_test = new DatabaseHandler(conn);
+    
 
         List<LoginInfo> infoList = new ArrayList<>();
 
         try {
-            infoList = dbh_test.getAllCredentials();
+            infoList = db.getAllCredentials();
             Log.d("STATE", "succesful retrieve");
             //Log.d("STATE", infoList.get(0).getUn());
 
@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+
         //if returned result is empty
             //show login error
         TextView errMsg = (TextView)findViewById(R.id.ErrorMsg);
@@ -147,6 +148,24 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    public Connection connectionclass (String user, String pass, String db, String server){
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        Connection connection = null;
+        String connectionURL = null;
+
+        try{
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            connectionURL = "jdbc:jtds:sqlserver://" + server + ";" + "databseName=" + db + ";user=" + user + ";password=" + pass + ";";
+            connection = DriverManager.getConnection(connectionURL);
+
+        }catch(Exception e){
+            Log.e("Error: ", e.getMessage());
+        }
+
+        return connection;
     }
 
     //Make sure to link the method to the button using the activity_main.xml file, click on the button, go to properties
