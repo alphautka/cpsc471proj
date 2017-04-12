@@ -152,22 +152,5 @@ public class MainMenuActivity extends AppCompatActivity {
 
 
 
-    @SuppressLint("NewApi")
-    public Connection connectionclass (String user, String pass, String db, String server){
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        Connection connection = null;
-        String connectionURL = null;
 
-        try{
-            Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connectionURL = "jdbc:jtds:sqlserver://" + server + ";" + "databseName=" + db + ";user=" + user + ";password=" + pass + ";";
-            connection = DriverManager.getConnection(connectionURL);
-
-        }catch(Exception e){
-            Log.e("Error: ", e.getMessage());
-        }
-
-        return connection;
-    }
 }

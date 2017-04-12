@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         List<String> uns = new ArrayList<>();
         List<String> pws = new ArrayList<>();
 
-        DatabaseHandler dbh_test = new DatabaseHandler(conn, un, pass, db, ip);
+        DatabaseHandler dbh_test = new DatabaseHandler(conn);
 
         List<LoginInfo> infoList = new ArrayList<>();
 

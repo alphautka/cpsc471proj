@@ -20,18 +20,15 @@ import java.util.List;
 public class DatabaseHandler {
 
     Connection conn;
-    String username, pass, db, ip;
+    String db = "CPSC471_Winter2017";
 
     public DatabaseHandler(){
         conn = connectionclass("CPSC471_Winter2017", "6VXVM_0~rq1F-$W", "CPSC471_Winter2017", "136.159.7.84:50001");
     }
 
-    public DatabaseHandler(Connection connection, String username, String pass, String db, String ip){
+    public DatabaseHandler(Connection connection){
         this.conn = connection;
-        this.username = username;
-        this.pass = pass;
-        this.db  = db;
-        this.ip = ip;
+
     }
 
     private static final String TABLE_PRODUCTS = "PRODUCTS";
@@ -1168,5 +1165,10 @@ public class DatabaseHandler {
             e.printStackTrace();
         }
     }
+
+
+
+
+
 
 }
