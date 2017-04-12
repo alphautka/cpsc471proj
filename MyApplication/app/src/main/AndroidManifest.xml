@@ -27,7 +27,9 @@
         <activity android:name=".OrderItem" />
         <activity android:name=".CustomerList" />
         <activity android:name=".CustomerItem" />
-        <activity android:name=".DetailedCustomerInfo"></activity>
+        <activity android:name=".DetailedCustomerInfo" />
+        <activity android:name=".EmployeeList" />
+        <activity android:name=".EmployeeItem"></activity>
     </application>
 
 </manifest>

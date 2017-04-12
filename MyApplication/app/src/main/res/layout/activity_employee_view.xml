@@ -105,7 +105,8 @@
             android:layout_toRightOf="@+id/linearLayout4"
             android:layout_weight="1"
             android:width="125dp"
-            android:text="employees" />
+            android:text="employees"
+            android:visibility="visible" />
     </LinearLayout>
 
     <LinearLayout
@@ -127,7 +128,8 @@
             android:layout_toRightOf="@+id/linearLayout5"
             android:layout_weight="1"
             android:width="125dp"
-            android:text="approve order" />
+            android:text="approve order"
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout

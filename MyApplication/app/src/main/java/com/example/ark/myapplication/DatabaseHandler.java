@@ -329,12 +329,7 @@ public class DatabaseHandler {
 
 			result.next();
             product.setCspc(result.getInt("CSPC"));
-            product.setPrice(result.getFloat("PRICE"));
-            product.setBrand(result.getString("BRAND"));
-            product.setName(result.getString("NAME"));
-            product.setQuantity(result.getInt("QUANTITY"));
-            product.setDiscount(result.getString("DISCOUNT"));
-            product.setOfferedBy(result.getInt("OFFERED_BY"));
+            product.setVolume(result.getString("VOLUME"));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1115,6 +1110,17 @@ public class DatabaseHandler {
             e.printStackTrace();
         }
     }
+
+    public void deleteEmployee(int eid){
+        String query = "DELETE FROM " + db + ".dbo." + TABLE_EMPLOYEE + " WHERE SSN = " + eid + ";";
+        try {
+            Statement stmt = conn.createStatement();
+            stmt.execute(query);
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     public void deleteCustomer(Customer customer){

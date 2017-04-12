@@ -36,7 +36,7 @@ public class DetailedItemView extends AppCompatActivity {
         TextView brandLabel = (TextView)findViewById(R.id.brandLabel);
         TextView priceLabel = (TextView)findViewById(R.id.priceLabel);
         TextView discLabel = (TextView)findViewById(R.id.discountLabel);
-        TextView qtyLabel = (TextView)findViewById(R.id.discountLabel);
+        TextView qtyLabel = (TextView)findViewById(R.id.quantityLabel);
         TextView volumeLabel = (TextView)findViewById(R.id.volumeLabel);
         TextView concentrationLabel = (TextView)findViewById(R.id.concentrationLabel);
 
@@ -54,9 +54,9 @@ public class DetailedItemView extends AppCompatActivity {
 
         nameLabel.setText(name);
         brandLabel.setText(brand);
-        priceLabel.setText(price);
-        discLabel.setText(discount);
-        qtyLabel.setText(qty);
+        priceLabel.setText("Price: " + price);
+        discLabel.setText("Discount: " + discount);
+        qtyLabel.setText("Quantity: " + qty);
 
         if(prod_type.equals("Liquor")){
             Liquor item = (Liquor)MainActivity.db.getLiquor(Integer.parseInt(cspc));
@@ -67,8 +67,8 @@ public class DetailedItemView extends AppCompatActivity {
             volume = item.getVolume();
         }
 
-        volumeLabel.setText(volume);
-        concentrationLabel.setText(concentration);
+        volumeLabel.setText("Volume " + volume);
+        concentrationLabel.setText("Concentration: " + concentration);
     }
 
 

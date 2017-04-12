@@ -12,17 +12,16 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerList extends AppCompatActivity {
+public class EmployeeList extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customer_list);
-        List<Customer> cList = null;
+        setContentView(R.layout.activity_employee_list);
+        List<Employee> eList = null;
 //        try {
 //            cList = MainActivity.db.getAllCustomers();
 //        } catch (SQLException e) {
@@ -37,7 +36,7 @@ public class CustomerList extends AppCompatActivity {
         } );
 
 
-        cList = new ArrayList<Customer>();
+        eList = new ArrayList<Employee>();
 //        for(int i = 0; i < 10; i++){
 //            Customer cTemp = new Customer();
 //            cTemp.setCid(123456 + i);
@@ -50,49 +49,30 @@ public class CustomerList extends AppCompatActivity {
 //            cList.add(cTemp);
 //        }
         try {
-            cList = MainActivity.db.getAllCustomers();
+            eList = MainActivity.db.getAllEmployees();
         }catch (Exception e){
             System.out.print(e.getMessage());
         }
 
-        LinearLayout custLayout = (LinearLayout)findViewById(R.id.customerList);
+        LinearLayout empLayout = (LinearLayout)findViewById(R.id.employeeList);
 
-        for(Customer c : cList){
-            final int cid = c.getCid();
-            CustomerItem temp = new CustomerItem(this);
-            temp.setName(c);
-            temp.setCID(c);
-            temp.setOnClickListener(new detailOnClickListener(c));
+        for(Employee e : eList){
+            final int eid = e.getSsn();
+            EmployeeItem temp = new EmployeeItem(this);
+            temp.setName(e);
+            temp.setEID(e);
             (temp.findViewById(R.id.deleteButton)).setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view){
-                    removeFromList(cid);
+                    removeFromList(eid);
                 }
             });
 
-            custLayout.addView(temp);
+            empLayout.addView(temp);
         }
 
     }
 
-    private class detailOnClickListener implements View.OnClickListener {
 
-        Customer cust;
-        public detailOnClickListener(Customer c){
-            cust = c;
-        }
-        public void onClick(View view){
-            detailCustomer(cust);
-        }
-    }
-
-    public void detailCustomer(Customer c){
-        Intent i = new Intent(getApplicationContext(), DetailedCustomerInfo.class);
-        i.putExtra("name", c.getFname() + " " + c.getLname());
-        i.putExtra("cid", Integer.toString(c.getCid()));
-        i.putExtra("phone", c.getPhoneNumber());
-        i.putExtra("discount", c.getDiscount());
-        startActivity(i);
-    }
 
     private void addCustomerDialog(){
         //make pop-up appear with editable text fields
@@ -100,7 +80,7 @@ public class CustomerList extends AppCompatActivity {
         //when OK is hit, send changes to db and update the labels
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Edit Customer Info");
+        builder.setTitle("Edit Employee Info");
         final LinearLayout dLayout = new LinearLayout(this);
         dLayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -111,18 +91,20 @@ public class CustomerList extends AppCompatActivity {
         final EditText ln = new EditText(this);
         ln.setHint("Last Name");
         final EditText custID = new EditText(this);
-        custID.setHint("Customer ID");
-        final EditText pNum = new EditText(this);
+        custID.setHint("Employee SSN");
+        //final EditText pNum = new EditText(this);
+        /*
         pNum.setHint("Phone Number");
         final EditText disc = new EditText(this);
         disc.setHint("Customer Specific Discount");
+        */
 
         //add to layout
         dLayout.addView(fn);
         dLayout.addView(ln);
         dLayout.addView(custID);
-        dLayout.addView(pNum);
-        dLayout.addView(disc);
+        //dLayout.addView(pNum);
+        //dLayout.addView(disc);
 
         builder.setView(dLayout);
         //set buttons and listeners
@@ -132,10 +114,10 @@ public class CustomerList extends AppCompatActivity {
                 String fn = ((EditText)dLayout.getChildAt(0)).getText().toString();
                 String ln = ((EditText)dLayout.getChildAt(1)).getText().toString();
                 String cid = ((EditText)dLayout.getChildAt(2)).getText().toString();
-                String pn = ((EditText)dLayout.getChildAt(3)).getText().toString();
-                String disc = ((EditText)dLayout.getChildAt(4)).getText().toString();
+                //String pn = ((EditText)dLayout.getChildAt(3)).getText().toString();
+                //String disc = ((EditText)dLayout.getChildAt(4)).getText().toString();
 
-                addCust(fn, ln, cid, pn, disc);
+                addCust(fn, ln, cid);
             }
         });
 
@@ -149,27 +131,27 @@ public class CustomerList extends AppCompatActivity {
         builder.show();
     }
 
-    private void addCust(String in_Fname, String in_Lname, String in_ID, String in_PN, String in_disc) {
-        LinearLayout custLayout = (LinearLayout)findViewById(R.id.customerList);
+    private void addCust(String in_Fname, String in_Lname, String in_ID) {
+        LinearLayout custLayout = (LinearLayout)findViewById(R.id.employeeList);
 
-        Customer c = new Customer();
-        c.setCid(Integer.parseInt(in_ID));
-        c.setDiscount(in_disc + "%");
+        Employee c = new Employee();
+        c.setSsn(Integer.parseInt(in_ID));
+
+        //c.setDiscount(in_disc + "%");
         c.setFname(in_Fname);
         c.setLname(in_Lname);
-        c.setPhoneNumber(in_PN);
+        //c.setPhoneNumber(in_PN);
 
-        CustomerItem temp = new CustomerItem(this);
+        EmployeeItem temp = new EmployeeItem(this);
         temp.setName(c);
-        temp.setCID(c);
-        final int cid = c.getCid();
+        temp.setEID(c);
+        final int eid = c.getSsn();
         ((ImageButton)(temp.findViewById(R.id.deleteButton))).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                removeFromList(cid);
+                removeFromList(eid);
             }
         });
-        temp.setOnClickListener(new detailOnClickListener(c));
 
         custLayout.addView(temp);
 //
@@ -178,18 +160,18 @@ public class CustomerList extends AppCompatActivity {
 //        ((TextView)findViewById(R.id.name)).setText(in_Fname + " " + in_Lname);
 //        ((TextView)findViewById(R.id.discount)).setText("Customer Specific Discount: " + in_disc);
         //Customer cust = new Customer(in_Fname, in_Lname, in_PN, in_disc);
-        MainActivity.db.addCustomer(c);
+        MainActivity.db.addEmployee(c);
     }
 
-    private void removeFromList(int cid){
-        LinearLayout custLayout = (LinearLayout)findViewById(R.id.customerList);
+    private void removeFromList(int eid){
+        LinearLayout custLayout = (LinearLayout)findViewById(R.id.employeeList);
         for(int i = 0; i < custLayout.getChildCount(); i++){
-            CustomerItem ci = (CustomerItem)custLayout.getChildAt(i);
-            TextView t = (TextView)ci.findViewById(R.id.CID);
+            EmployeeItem ci = (EmployeeItem)custLayout.getChildAt(i);
+            TextView t = (TextView)ci.findViewById(R.id.EID);
             String s = t.getText().toString();
-            if(Integer.parseInt(s) == cid) {
+            if(Integer.parseInt(s) == eid) {
                 custLayout.removeView(custLayout.getChildAt(i));
-                MainActivity.db.deleteCustomer(cid);
+                MainActivity.db.deleteEmployee(eid);
             }
         }
     }

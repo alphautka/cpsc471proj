@@ -121,15 +121,21 @@ public class MainActivity extends AppCompatActivity {
         String inputpass = pass_in.getText().toString();
 
         Boolean successful = false;
+        Boolean owner = false;
 
         for (LoginInfo loginfo: infoList){
             Log.d("DEBUG", loginfo.getUn());
             Log.d("DEBUG", inputuser);
             if (inputuser.equals(loginfo.getUn()) && inputpass.equals(loginfo.getPw())){
                 successful = true;
+                if (inputuser.equals("owner")){
+                    owner = true;
+                }
                 break;
             }
         }
+
+
 
 
         //if returned result is empty
@@ -143,7 +149,8 @@ public class MainActivity extends AppCompatActivity {
             user_in.setText("");
             pass_in.setText("");
             Intent i = new Intent(getApplicationContext(), EmployeeView.class);
-            i.putExtra("PriviledgedUser", true);
+            i.putExtra("PriviledgedUser", successful);
+            i.putExtra("isOwner", owner);
 
             startActivity(i);
         }

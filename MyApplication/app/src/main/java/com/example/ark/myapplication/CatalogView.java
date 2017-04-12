@@ -56,7 +56,7 @@ public class CatalogView extends AppCompatActivity {
         ArrayList<Products> plist = new ArrayList();
 
         if (type.equals("Liquor")){
-            labelText = "Liquor";
+            curProdType = labelText = "Liquor";
             try {
 
                 list = MainActivity.db.getAllLiquors();
@@ -75,6 +75,14 @@ public class CatalogView extends AppCompatActivity {
             curProdType = labelText = "Non-Liquor";
             try {
                 list = MainActivity.db.getAllNonLiquors();
+
+
+                for (int i = 0; i < list.size(); i++){
+                    Products product = MainActivity.db.getProduct(list.get(i).getCspc());
+                    System.out.println(product.getBrand());
+                    plist.add(product);
+                }
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -83,6 +91,13 @@ public class CatalogView extends AppCompatActivity {
 
             try {
                 list = MainActivity.db.getAllMiscs();
+
+                for (int i = 0; i < list.size(); i++){
+                    Products product = MainActivity.db.getProduct(list.get(i).getCspc());
+                    System.out.println(product.getBrand());
+                    plist.add(product);
+                }
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -90,6 +105,13 @@ public class CatalogView extends AppCompatActivity {
             curProdType = labelText = "Employee Picks";
             try{
                 list = MainActivity.db.getAllEmployeeSelections();
+
+                for (int i = 0; i < list.size(); i++){
+                    Products product = MainActivity.db.getProduct(list.get(i).getCspc());
+                    System.out.println(product.getBrand());
+                    plist.add(product);
+                }
+
 
             }catch(SQLException e){
                 e.printStackTrace();
@@ -137,12 +159,12 @@ public class CatalogView extends AppCompatActivity {
     void detailView(Products p){
         Intent i = new Intent(getApplicationContext(), DetailedItemView.class);
 
-        i.putExtra("price", p.getPrice());
+        i.putExtra("price", Float.toString(p.getPrice()));
         i.putExtra("discount", p.getDiscount());
-        i.putExtra("qty", p.getQuantity());
+        i.putExtra("qty", Integer.toString(p.getQuantity()));
         i.putExtra("name", p.getName());
         i.putExtra("brand", p.getBrand());
-        i.putExtra("cpsc", p.getCspc());
+        i.putExtra("cspc", Integer.toString(p.getCspc()));
         i.putExtra("prod_type", curProdType);
 
 
