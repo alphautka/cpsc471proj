@@ -280,8 +280,8 @@ public class DatabaseHandler {
 
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
-            result.next();
 
+			result.next();
             product.setCspc(result.getInt("CSPC"));
             product.setPrice(result.getFloat("PRICE"));
             product.setBrand(result.getString("BRAND"));
@@ -518,7 +518,7 @@ public class DatabaseHandler {
                 product.setBrand(result.getString("BRAND"));
                 product.setName(result.getString("NAME"));
                 product.setQuantity(result.getInt("QUANTITY"));
-                product.setDiscount(result.getString("DOUBLE"));
+                product.setDiscount(result.getString("DISCOUNT"));
                 product.setOfferedBy(result.getInt("OFFERED_BY"));
                 productList.add(product);
 
@@ -764,12 +764,36 @@ public class DatabaseHandler {
         return orderList;
     }
 
-    //TODO make relationship getters
-
-    //TODO? have to make object??
     public List<Products> getAllEmployeeSelections() throws SQLException {
-        List<Products> selectionList = new ArrayList<Products>();
-        return selectionList;
+        String query = "SELECT * FROM " + db + ".dbo." + TABLE_EMPLOYEE_SELECTION + ";";
+        List<Products> productList = new ArrayList<Products>();
+
+        Statement stmt = null;
+        try {
+
+            stmt = conn.createStatement();
+            ResultSet result = stmt.executeQuery(query);
+
+            while(result.next()){
+                Products product = new Products();
+                product.setCspc(result.getInt("CSPC"));
+                product.setPrice(result.getFloat("PRICE"));
+                product.setBrand(result.getString("BRAND"));
+                product.setName(result.getString("NAME"));
+                product.setQuantity(result.getInt("QUANTITY"));
+                product.setDiscount(result.getString("DOUBLE"));
+                product.setOfferedBy(result.getInt("OFFERED_BY"));
+                productList.add(product);
+
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (stmt != null) {stmt.close();}
+        }
+        return productList;
     }
 
     /*
@@ -1125,16 +1149,6 @@ public class DatabaseHandler {
 
     public void deleteCustomer(Customer customer){
         String query = "DELETE FROM " + db + ".dbo." + TABLE_CUSTOMER + " WHERE CID = " + customer.getCid() + ";";
-        try {
-            Statement stmt = conn.createStatement();
-            stmt.execute(query);
-        } catch(SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void deleteCustomer(int cId){
-        String query = "DELETE FROM " + db + ".dbo." + TABLE_CUSTOMER + " WHERE CID = " + cId + ";";
         try {
             Statement stmt = conn.createStatement();
             stmt.execute(query);
