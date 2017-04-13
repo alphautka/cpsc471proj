@@ -1157,6 +1157,16 @@ public class DatabaseHandler {
         }
     }
 
+    public void deleteCustomer(int cid){
+        String query = "DELETE FROM " + db + ".dbo." + TABLE_CUSTOMER + " WHERE CID = " + cid + ";";
+        try {
+            Statement stmt = conn.createStatement();
+            stmt.execute(query);
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void deleteDistributor(Distributor distributor){
         String query = "DELETE FROM " + db + ".dbo." + TABLE_DISTRIBUTOR + " WHERE DID = " + distributor.getDid() + ";";
         try {
